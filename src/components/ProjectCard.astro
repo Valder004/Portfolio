@@ -1,0 +1,56 @@
+---
+// Carte projet utilisée sur l'accueil (featured) et sur la page Projets (compact).
+import { Image } from "astro:assets";
+
+const { project, featured = false, compact = false } = Astro.props;
+const href = `/projets/${project.slug}`;
+---
+
+<article class:list={["work-card", { "work-card--featured": featured }]}>
+  <a
+    href={href}
+    class={`work-card-media work-card-media--static cover ${project.slug}`}
+    aria-label={`Découvrir le projet ${project.title}`}
+  >
+    <Image
+      src={project.image}
+      alt={project.alt}
+      widths={[480, 800, 1200]}
+      sizes="(max-width: 560px) 100vw, (max-width: 1280px) 50vw, 25vw"
+    />
+    <span>{project.number}</span>
+  </a>
+
+  <div class="work-card-meta">
+    <p>{project.discipline}</p>
+    <p>{project.year}</p>
+  </div>
+
+  <div class="work-card-content">
+    <div>
+      <h2><a href={href}>{project.title}</a></h2>
+      <p>{project.intro}</p>
+      {
+        !featured && (
+          <p class="work-card-role">
+            <strong>Mon rôle</strong>
+            {project.role}
+          </p>
+        )
+      }
+      {
+        !featured && (
+          <ul class="work-card-tags" aria-label="Livrables">
+            {project.deliverables.slice(0, compact ? 2 : 3).map((deliverable) => (
+              <li>{deliverable}</li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+    <a href={href} class="work-card-action" aria-label={`Découvrir le projet ${project.title}`}>
+      <span>Voir le projet</span>
+      <strong aria-hidden="true">↗</strong>
+    </a>
+  </div>
+</article>

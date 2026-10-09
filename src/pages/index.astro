@@ -1,0 +1,152 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { expertises, orderedProjects } from "../data/projects.js";
+import football from "../assets/football-editorial.jpg";
+import portrait from "../assets/valentin-portrait.jpg";
+
+const tickerItems = ["Communication sportive", "Stratégie", "Création de contenus", "Réseaux sociaux", "Événementiel"];
+---
+
+<Layout>
+  <div class="home-opening">
+    <section class="home-hero page-pad">
+      <div class="hero-meta">
+        <p>Portfolio 2026</p>
+        <p>Valentin Deroo</p>
+        <p>Communication sportive</p>
+      </div>
+      <p class="hero-eyebrow"><span aria-hidden="true">↗</span> Culture sportive. Regard créatif.</p>
+      <h1>
+        <span class="hero-title-line">Créer le <strong>jeu.</strong></span>
+        <span class="hero-title-line hero-title-line--second">Marquer <em>les esprits.</em></span>
+      </h1>
+      <div class="hero-bottom">
+        <p>
+          Je veux faire vivre le sport à travers des messages, des contenus
+          et des campagnes qui rapprochent les organisations de leurs publics.
+        </p>
+        <div class="hero-actions">
+          <a href="/projets" class="projects-button">
+            <span>Voir les projets</span>
+            <span class="projects-button-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-image page-pad">
+      <div class="image-frame">
+        <Image
+          src={football}
+          alt="Joueur de football en action sur un terrain"
+          widths={[640, 1000, 1400, 1800]}
+          sizes="(max-width: 1000px) 100vw, 45vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <p class="image-score">90:00</p>
+        <p class="image-caption">
+          Le sport est une culture.
+          <br />
+          Donnons-lui une voix.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <section class="home-principles page-pad" aria-label="Ma façon de travailler">
+    <div><span>01 / Comprendre</span><p>Le public avant le message.</p></div>
+    <div><span>02 / Créer</span><p>Une identité qui se distingue.</p></div>
+    <div><span>03 / Activer</span><p>Des idées pensées pour le terrain.</p></div>
+  </section>
+
+  <section class="ticker" aria-label="Domaines d’expertise">
+    <div>
+      {
+        [false, true].map((hidden) => (
+          <span class="ticker-segment" aria-hidden={hidden ? "true" : undefined}>
+            {tickerItems.map((item) => (
+              <Fragment>
+                {item} <span>/</span>{" "}
+              </Fragment>
+            ))}
+          </span>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="home-projects page-pad">
+    <div class="section-intro">
+      <p class="section-label">01 — Sélection / 02 projets</p>
+      <h2>Des idées<br /><i>qui bougent.</i></h2>
+      <a href="/projets" class="text-link">Les {orderedProjects.length} projets ↗</a>
+    </div>
+    <div class="projects-card-grid projects-card-grid--featured">
+      {orderedProjects.slice(0, 2).map((project) => <ProjectCard project={project} featured />)}
+    </div>
+    <div class="selection-footer">
+      <p>Deux univers, une même exigence : donner du sens à chaque choix créatif.</p>
+    </div>
+  </section>
+
+  <section class="home-presentation page-pad" aria-labelledby="presentation-title">
+    <figure class="presentation-portrait">
+      <Image
+        src={portrait}
+        alt="Valentin Deroo devant une vue panoramique sur une ville à la tombée de la nuit"
+        width={480}
+        height={640}
+      />
+      <figcaption><span>Valentin Deroo</span><span>Sport × Création</span></figcaption>
+    </figure>
+    <div class="presentation-copy">
+      <p class="section-label">02 — Faisons connaissance</p>
+      <h2 id="presentation-title">Le sport me passionne.<br /><span>La communication m’anime.</span></h2>
+      <p class="presentation-lead">Moi, c’est Valentin. Mon objectif : travailler dans la communication sportive.</p>
+      <p>
+        Après un parcours en STAPS de 2022 à 2025, je poursuis mes études en MMI de 2025 à 2028.
+        Je souhaite mettre cette double culture au service d’un club, d’une marque ou d’un événement sportif.
+        Le design et les outils numériques m’aident à donner forme aux messages, mais la communication reste
+        au cœur de mon projet.
+      </p>
+      <ul class="presentation-focus" aria-label="Mes domaines de formation">
+        <li><span>STAPS · 2022 — 2025</span>Comprendre le sport</li>
+        <li><span>MMI · 2025 — 2028</span>Communiquer et créer des contenus</li>
+      </ul>
+      <a href="/a-propos" class="presentation-link">Découvrir mon parcours <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+
+  <section class="home-expertise page-pad">
+    <p class="section-label">03 — Savoir-faire / Double culture</p>
+    <div class="expertise-heading">
+      <h2>De la stratégie<br /><i>au terrain.</i></h2>
+      <p>
+        Comprendre les publics, raconter une histoire et faire rayonner un
+        projet sportif. Mes compétences créatives et numériques sont au
+        service de cette ambition.
+      </p>
+    </div>
+    <div class="expertise-list">
+      {
+        expertises.map(([title, text], index) => (
+          <div>
+            <span>0{index + 1}</span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </div>
+        ))
+      }
+    </div>
+    <a href="/a-propos" class="expertise-profile-link">Découvrir mon parcours <span aria-hidden="true">↗</span></a>
+  </section>
+
+  <a href="/contact" class="contact-banner page-pad">
+    <p>Une idée ou un projet ?</p>
+    <h2>On entre en jeu.</h2>
+    <span>↗</span>
+  </a>
+</Layout>

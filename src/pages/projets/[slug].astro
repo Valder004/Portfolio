@@ -1,0 +1,142 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProjectImage from "../../components/ProjectImage.astro";
+import { orderedProjects } from "../../data/projects.js";
+
+// Une page est générée pour chaque projet au moment du build.
+export function getStaticPaths() {
+  return orderedProjects.map((project, index) => ({
+    params: { slug: project.slug },
+    props: { project, nextProject: orderedProjects[(index + 1) % orderedProjects.length] },
+  }));
+}
+
+const { project, nextProject } = Astro.props;
+---
+
+<Layout title={project.title} description={`${project.title} — ${project.intro}`}>
+  <div class="project-detail">
+    <header class="project-detail-hero page-pad">
+      <div class="detail-topline">
+        <a href="/projets">← Tous les projets</a>
+        <span>{project.discipline}</span>
+        <span>{project.year}</span>
+      </div>
+      <p class="section-label">Projet — {project.number}</p>
+      <h1>{project.title}</h1>
+      <p class="detail-intro">{project.intro}</p>
+      {
+        project.websiteUnavailable && (
+          <div class="project-site-notice">
+            <strong>Site temporairement indisponible</strong>
+            <p>
+              {project.title} est actuellement hors ligne. Les captures ci-dessous permettent de découvrir le
+              projet en attendant son retour.
+            </p>
+          </div>
+        )
+      }
+      {
+        project.website && !project.websiteUnavailable && (
+          <a
+            class="project-website-link"
+            href={project.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Voir le site ${project.title} (nouvel onglet)`}
+          >
+            Voir le site <span aria-hidden="true">↗</span>
+          </a>
+        )
+      }
+    </header>
+
+    <section class="detail-cover page-pad">
+      <div>
+        <ProjectImage
+          image={project.image}
+          alt={project.alt}
+          title={project.title}
+          class="detail-image-trigger"
+          sizes="(max-width: 820px) 100vw, 360px"
+        />
+      </div>
+      <aside class="detail-cover-summary">
+        <p class="section-label">{project.discipline} / {project.year}</p>
+        <h2>L’objectif</h2>
+        <p>{project.objective}</p>
+      </aside>
+    </section>
+
+    <section class="detail-overview page-pad">
+      <div>
+        <p class="section-label">Contexte</p>
+        <p class="detail-lead">{project.context}</p>
+        {
+          project.gallery?.map((visual) => (
+            <figure class="detail-inline-visual">
+              <ProjectImage
+                image={visual.image}
+                alt={visual.alt}
+                title={`${project.title} — ${visual.title}`}
+                class="project-gallery-image"
+                sizes="(max-width: 820px) 100vw, 60vw"
+              />
+            </figure>
+          ))
+        }
+      </div>
+      <aside>
+        <p class="section-label">Mon rôle</p>
+        <p>{project.role}</p>
+        <p class="section-label">Livrables</p>
+        <ul>
+          {project.deliverables.map((deliverable) => <li>{deliverable}</li>)}
+        </ul>
+      </aside>
+    </section>
+
+    <section class="detail-process page-pad">
+      <article>
+        <span>01</span>
+        <p class="section-label">Le public</p>
+        <h2>{project.audience}</h2>
+      </article>
+      <article>
+        <span>02</span>
+        <p class="section-label">Le message</p>
+        <h2>{project.message}</h2>
+        <p class="detail-approach">{project.approach}</p>
+      </article>
+    </section>
+
+    <section class="detail-choices page-pad" aria-labelledby="choices-heading">
+      <p class="section-label">Démarche de communication</p>
+      <h2 id="choices-heading">Les choix derrière le projet</h2>
+      {
+        project.choices.map((choice, index) => (
+          <article class="detail-choice-row">
+            <span>0{index + 1}</span>
+            <h3>{choice.title}</h3>
+            <p>{choice.text}</p>
+          </article>
+        ))
+      }
+    </section>
+
+    <section class="detail-result page-pad">
+      <p class="section-label">Résultat</p>
+      <p>{project.result}</p>
+      <div class="detail-perspective">
+        <p class="section-label">Ce que ce projet illustre</p>
+        <p>{project.perspective}</p>
+      </div>
+    </section>
+
+    <a href={`/projets/${nextProject.slug}`} class="next-project page-pad">
+      <span>Projet suivant</span>
+      <h2>{nextProject.title}</h2>
+      <strong>↗</strong>
+    </a>
+  </div>
+</Layout>

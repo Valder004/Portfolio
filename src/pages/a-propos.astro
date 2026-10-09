@@ -1,0 +1,113 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import { expertises } from "../data/projects.js";
+import portrait from "../assets/valentin-portrait.jpg";
+
+const path = [
+  {
+    date: "2025 — 2028",
+    status: "En cours",
+    degree: "BUT MMI",
+    subtitle: "Métiers du multimédia et de l’internet",
+    text: "Une formation pour concevoir des messages, produire des contenus et les diffuser sur des supports numériques. Je m’oriente vers la communication, en m’appuyant sur les outils créatifs et digitaux.",
+    tagsLabel: "Domaines de formation MMI",
+    tags: ["Communication", "Création de contenus", "Outils numériques"],
+  },
+  {
+    date: "2022 — 2025",
+    status: "Parcours précédent",
+    degree: "Licence STAPS",
+    subtitle: "Sciences et techniques des activités physiques et sportives",
+    text: "Ce parcours nourrit ma compréhension des pratiques sportives, des publics et des organisations. Une base que je souhaite mobiliser pour communiquer dans le sport.",
+    tagsLabel: "Apports du parcours STAPS",
+    tags: ["Culture sportive", "Publics", "Organisations"],
+  },
+];
+---
+
+<Layout title="À propos" description="Valentin Deroo, étudiant en BUT MMI après une licence STAPS, orienté communication sportive.">
+  <div class="page-pad inner-page about-page">
+    <header class="page-heading about-heading">
+      <p class="section-label">À propos — Profil</p>
+      <h1>La tête dans<br /><i>le jeu.</i></h1>
+    </header>
+
+    <section class="about-intro">
+      <figure class="presentation-portrait">
+        <Image
+          src={portrait}
+          alt="Valentin Deroo devant une vue panoramique sur une ville à la tombée de la nuit"
+          width={480}
+          height={640}
+          loading="eager"
+        />
+        <figcaption><span>Valentin Deroo</span><span>Sport × Création</span></figcaption>
+      </figure>
+      <div class="about-copy">
+        <p class="lead">
+          Je suis Valentin, étudiant en MMI après un parcours en STAPS.
+          Je m’oriente vers la communication sportive pour faire vivre les
+          histoires des clubs, des marques et des événements.
+        </p>
+        <div class="about-columns">
+          <p>
+            Mon parcours en STAPS nourrit ma compréhension du sport et de
+            ses publics. En MMI, je développe mes compétences en stratégie,
+            création de contenus et communication digitale.
+          </p>
+          <p>
+            Le design et le développement sont des compétences complémentaires :
+            je les mobilise pour créer des supports utiles, au service d’un
+            message et d’un objectif de communication.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-path">
+      <p class="section-label">Parcours universitaire</p>
+      {
+        path.map((step) => (
+          <div class="path-row">
+            <div class="path-date">
+              <span>{step.date}</span>
+              <span class="path-status">{step.status}</span>
+            </div>
+            <div class="path-degree">
+              <h2>{step.degree}</h2>
+              <p>{step.subtitle}</p>
+            </div>
+            <div class="path-description">
+              <p>{step.text}</p>
+              <ul aria-label={step.tagsLabel}>
+                {step.tags.map((tag) => <li>{tag}</li>)}
+              </ul>
+            </div>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="about-tools">
+      <p class="section-label">Savoir-faire</p>
+      <div class="tool-grid">
+        {
+          expertises.map(([title, text], index) => (
+            <article>
+              <span>0{index + 1}</span>
+              <h2>{title}</h2>
+              <p>{text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <a href="/contact" class="contact-banner">
+      <p>Envie de construire la suite ensemble ?</p>
+      <h2>Écrivez-moi.</h2>
+      <span>↗</span>
+    </a>
+  </div>
+</Layout>

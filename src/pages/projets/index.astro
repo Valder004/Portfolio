@@ -1,0 +1,24 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import { orderedProjects } from "../../data/projects.js";
+
+const count = String(orderedProjects.length).padStart(2, "0");
+---
+
+<Layout title="Projets" description="Les projets de Valentin Deroo : campagnes, identités visuelles, UX/UI et stratégie de communication.">
+  <div class="page-pad inner-page projects-page">
+    <header class="page-heading projects-heading">
+      <p class="section-label">Index des projets — {count}</p>
+      <h1>Le travail,<br /><i>en images.</i></h1>
+    </header>
+
+    <section class="projects-gallery-intro" aria-label="Présentation de la sélection">
+      <p class="section-label">{count} projets / 2025 — 2026</p>
+    </section>
+
+    <div class="projects-card-grid projects-card-grid--all">
+      {orderedProjects.map((project) => <ProjectCard project={project} compact />)}
+    </div>
+  </div>
+</Layout>

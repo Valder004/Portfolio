@@ -1,0 +1,74 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { site } from "../data/site.js";
+---
+
+<Layout title="Contact" description="Une alternance, un stage ou un projet ? Contactez Valentin Deroo.">
+  <div class="page-pad inner-page contact-page">
+    <header class="page-heading contact-heading">
+      <p class="section-label">Contact — Disponible</p>
+      <h1>À vous<br /><i>la balle.</i></h1>
+      <p class="heading-note">Une alternance, un stage ou un projet ? Écrivez-moi.</p>
+    </header>
+
+    <section class="contact-grid">
+      <aside>
+        <p class="section-label">Coordonnées</p>
+        <a href={`mailto:${site.email}`}>{site.email} ↗</a>
+        <a href={site.phone.href}>{site.phone.display} ↗</a>
+        <p class="availability"><span></span>Disponible pour de nouvelles opportunités</p>
+      </aside>
+
+      <form data-contact-form data-email={site.email}>
+        <label>
+          <span>01 — Nom</span>
+          <input name="name" required autocomplete="name" placeholder="Écrivez votre nom" />
+        </label>
+        <label>
+          <span>02 — Email</span>
+          <input name="email" type="email" required autocomplete="email" placeholder="Écrivez votre email" />
+        </label>
+        <label>
+          <span>03 — Message</span>
+          <textarea name="message" required rows="5" placeholder="Décrivez votre projet en quelques mots"></textarea>
+        </label>
+        <button type="submit">Envoyer le message <span>↗</span></button>
+        <p class="form-note" role="status" aria-live="polite" data-form-note hidden></p>
+      </form>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  import { sendContactMessage } from "../lib/contact.js";
+
+  const form = document.querySelector("[data-contact-form]");
+  const note = form?.querySelector("[data-form-note]");
+  const button = form?.querySelector("button[type=submit]");
+
+  function showNote(text) {
+    note.textContent = text;
+    note.hidden = false;
+  }
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const data = Object.fromEntries(new FormData(form));
+
+    button.disabled = true;
+    try {
+      const result = await sendContactMessage(data, form.dataset.email);
+      if (result === "mailto") {
+        showNote("Votre application email va s’ouvrir pour finaliser l’envoi.");
+      } else {
+        showNote("Merci, votre message est bien envoyé. Je vous réponds rapidement !");
+        form.reset();
+      }
+    } catch (error) {
+      console.error(error);
+      showNote("Oups, l’envoi a échoué. Écrivez-moi directement par email.");
+    } finally {
+      button.disabled = false;
+    }
+  });
+</script>
