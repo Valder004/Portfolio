@@ -13,3 +13,10 @@ dist/
 Thumbs.db
 .vscode/*
 !.vscode/extensions.json
+
+# PocketBase (le programme et la base de données restent sur ta machine)
+pocketbase/pocketbase
+pocketbase/pocketbase.exe
+pocketbase/pb_data/
+pocketbase/CHANGELOG.md
+pocketbase/LICENSE.md

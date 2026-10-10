@@ -1,0 +1,44 @@
+---
+// Logo VD (écusson), dessiné en SVG pour rester net à toutes les tailles.
+// variant :
+//   "light"  → A · fond crème  (écusson orange, lettres encre, ombre orange)
+//   "dark"   → B · fond encre  (écusson orange, lettres crème, ombre orange)
+//   "orange" → C · fond orange (écusson encre, lettres crème, ombre encre)
+const { variant = "light", class: className = "", title } = Astro.props;
+
+const palettes = {
+  light: { outer: "#cc4814", inner: "#161616", letters: "#161616", shadow: "#cc4814" },
+  dark: { outer: "#cc4814", inner: "#f1efe6", letters: "#f1efe6", shadow: "#cc4814" },
+  orange: { outer: "#161616", inner: "#f1efe6", letters: "#f1efe6", shadow: "#161616" },
+};
+const c = palettes[variant] ?? palettes.light;
+
+const shieldOuter = "M200 8 L392 68 L392 250 C392 380 290 432 200 472 C110 432 8 380 8 250 L8 68 Z";
+const shieldInner = "M200 44 L358 93 L358 255 C358 360 280 404 200 442 C120 404 42 360 42 255 L42 93 Z";
+const letterV =
+  "M88 165 L140 165 L140 178 L128 178 L152 268 L173 178 L163 178 L163 165 L206 165 L206 178 L196 178 L158 303 L139 303 L102 178 L88 178 Z";
+const letterD =
+  "M220 165 L296 165 L316 185 L316 283 L296 303 L220 303 L220 290 L232 290 L232 178 L220 178 Z M256 178 L289 178 L298 187 L298 281 L289 290 L256 290 Z";
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 400 480"
+  class:list={["block h-auto", className]}
+  role={title ? "img" : undefined}
+  aria-label={title}
+  aria-hidden={title ? undefined : "true"}
+>
+  <path d={shieldOuter} fill="none" stroke={c.outer} stroke-width="14" stroke-linejoin="round" />
+  <path d={shieldInner} fill="none" stroke={c.inner} stroke-width="3.5" stroke-linejoin="round" />
+  <g fill-rule="evenodd">
+    <g fill={c.shadow} transform="translate(7 8)">
+      <path d={letterV} />
+      <path d={letterD} />
+    </g>
+    <g fill={c.letters}>
+      <path d={letterV} />
+      <path d={letterD} />
+    </g>
+  </g>
+</svg>

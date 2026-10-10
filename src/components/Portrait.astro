@@ -1,0 +1,21 @@
+---
+// Photo de profil avec légende (accueil et page À propos).
+import { Image } from "astro:assets";
+import portrait from "../assets/valentin-portrait.jpg";
+
+const { eager = false, class: className = "" } = Astro.props;
+---
+
+<figure class:list={["w-full max-w-[400px] bg-ink md:max-w-[460px] md:justify-self-center", className]}>
+  <Image
+    src={portrait}
+    alt="Valentin Deroo devant une vue panoramique sur une ville à la tombée de la nuit"
+    width={480}
+    height={640}
+    loading={eager ? "eager" : "lazy"}
+    class="block aspect-[3/4] h-auto w-full object-cover"
+  />
+  <figcaption class="flex flex-wrap justify-between gap-2 p-4 font-mono text-[0.6rem] text-paper uppercase">
+    <span>Valentin Deroo</span><span>Sport × Création</span>
+  </figcaption>
+</figure>

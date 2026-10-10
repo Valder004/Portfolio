@@ -2,74 +2,118 @@
 import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import ProjectCard from "../components/ProjectCard.astro";
-import { expertises, orderedProjects } from "../data/projects.js";
+import SectionLabel from "../components/SectionLabel.astro";
+import ContactBanner from "../components/ContactBanner.astro";
+import Portrait from "../components/Portrait.astro";
+import { expertises } from "../data/projects.js";
+import { getProjects } from "../lib/projects.js";
 import football from "../assets/football-editorial.jpg";
-import portrait from "../assets/valentin-portrait.jpg";
+
+const orderedProjects = await getProjects();
 
 const tickerItems = ["Communication sportive", "Stratégie", "Création de contenus", "Réseaux sociaux", "Événementiel"];
+
+const principles = [
+  ["01 / Comprendre", "Le public avant le message."],
+  ["02 / Créer", "Une identité qui se distingue."],
+  ["03 / Activer", "Des idées pensées pour le terrain."],
+];
+
+// Marges latérales communes à toutes les sections
+const pad = "px-4 md:px-8 xl:px-15";
+// Style des grands titres de section
+const sectionTitle =
+  "font-display text-[clamp(2.75rem,12vw,5.625rem)] leading-[0.94] font-medium tracking-[-0.045em] uppercase md:text-[clamp(3.4rem,6vw,5.625rem)]";
 ---
 
 <Layout>
-  <div class="home-opening">
-    <section class="home-hero page-pad">
-      <div class="hero-meta">
+  <!-- Ouverture : titre + photo -->
+  <div class="grid border-b border-ink/20 pb-8 lg:grid-cols-[1.15fr_0.85fr] lg:pt-8 lg:pb-12">
+    <section class:list={["flex flex-col py-10 md:py-12 lg:py-6", pad]}>
+      <div class="flex flex-wrap justify-between gap-4 border-b border-ink/20 pb-4 font-mono text-[0.6rem] uppercase md:text-[0.65rem]">
         <p>Portfolio 2026</p>
         <p>Valentin Deroo</p>
-        <p>Communication sportive</p>
+        <p class="hidden sm:block">Communication sportive</p>
       </div>
-      <p class="hero-eyebrow"><span aria-hidden="true">↗</span> Culture sportive. Regard créatif.</p>
-      <h1>
-        <span class="hero-title-line">Créer le <strong>jeu.</strong></span>
-        <span class="hero-title-line hero-title-line--second">Marquer <em>les esprits.</em></span>
+
+      <p class="mt-8 flex items-center gap-3 font-mono text-[0.58rem] tracking-[0.035em] uppercase md:mt-10 md:text-[0.65rem]">
+        <span class="grid size-7 place-items-center bg-orange font-sans text-base" aria-hidden="true">↗</span>
+        Culture sportive. Regard créatif.
+      </p>
+
+      <h1
+        class="my-8 flex flex-col font-display text-[clamp(2.75rem,13vw,5.625rem)] leading-[0.98] font-medium tracking-[-0.025em] uppercase md:my-10 md:text-[clamp(3.5rem,10vw,5.625rem)] lg:mt-8 lg:mb-12 lg:text-[clamp(3.5rem,6.4vw,5.625rem)]"
+      >
+        <span>Créer le <strong class="font-medium text-orange">jeu.</strong></span>
+        <span>Marquer <em class="mt-[0.15em] block text-orange not-italic">les esprits.</em></span>
       </h1>
-      <div class="hero-bottom">
-        <p>
+
+      <div class="mt-auto flex flex-col items-start gap-6 border-t border-ink/20 pt-6">
+        <p class="max-w-[25rem] text-base leading-[1.7]">
           Je veux faire vivre le sport à travers des messages, des contenus
           et des campagnes qui rapprochent les organisations de leurs publics.
         </p>
-        <div class="hero-actions">
-          <a href="/projets" class="projects-button">
-            <span>Voir les projets</span>
-            <span class="projects-button-arrow" aria-hidden="true">↗</span>
-          </a>
-        </div>
+        <a
+          href="/projets"
+          class="group inline-flex min-h-15 items-center gap-8 border border-ink bg-orange py-2 pr-2.5 pl-6 text-[0.85rem] transition duration-200 hover:bg-ink hover:text-paper hover:shadow-[4px_4px_0_var(--color-orange)]"
+        >
+          <span>Voir les projets</span>
+          <span
+            class="grid size-10 place-items-center bg-ink text-[1.35rem] text-paper transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
+            aria-hidden="true">↗</span
+          >
+        </a>
       </div>
     </section>
 
-    <section class="home-image page-pad">
-      <div class="image-frame">
+    <section class:list={["lg:pl-0", pad]}>
+      <div
+        class="relative isolate h-[min(115vw,520px)] min-h-[380px] overflow-hidden bg-ink before:pointer-events-none before:absolute before:inset-4 before:z-[1] before:border before:border-white/30 after:absolute after:inset-0 after:bg-linear-to-b after:from-transparent after:from-45% after:to-black/65 md:h-[55vw] md:max-h-[600px] lg:h-full lg:max-h-none lg:min-h-[590px]"
+      >
         <Image
           src={football}
           alt="Joueur de football en action sur un terrain"
           widths={[640, 1000, 1400, 1800]}
-          sizes="(max-width: 1000px) 100vw, 45vw"
+          sizes="(min-width: 1024px) 45vw, 100vw"
           loading="eager"
           fetchpriority="high"
+          class="size-full object-cover contrast-[1.05] saturate-[0.8]"
         />
-        <p class="image-score">90:00</p>
-        <p class="image-caption">
-          Le sport est une culture.
-          <br />
-          Donnons-lui une voix.
+        <p class="absolute top-6 right-6 z-[2] bg-orange px-4 py-2.5 font-mono text-[0.7rem]">90:00</p>
+        <p
+          class="absolute inset-x-6 bottom-8 z-[2] font-display text-[clamp(2rem,8vw,3.4rem)] leading-none font-medium text-white uppercase md:inset-x-8 lg:text-[clamp(2rem,3vw,3.4rem)]"
+        >
+          Le sport est une culture.<br />Donnons-lui une voix.
         </p>
       </div>
     </section>
   </div>
 
-  <section class="home-principles page-pad" aria-label="Ma façon de travailler">
-    <div><span>01 / Comprendre</span><p>Le public avant le message.</p></div>
-    <div><span>02 / Créer</span><p>Une identité qui se distingue.</p></div>
-    <div><span>03 / Activer</span><p>Des idées pensées pour le terrain.</p></div>
+  <!-- Principes -->
+  <section class:list={["grid gap-5 py-8 md:grid-cols-3 md:gap-8", pad]} aria-label="Ma façon de travailler">
+    {
+      principles.map(([label, text], index) => (
+        <div class:list={[index > 0 && "border-t border-ink/20 pt-5 md:border-t-0 md:border-l md:pt-0 md:pl-8"]}>
+          <span class="font-mono text-[0.65rem] text-orange uppercase">{label}</span>
+          <p class="mt-2.5 text-[0.95rem]">{text}</p>
+        </div>
+      ))
+    }
   </section>
 
-  <section class="ticker" aria-label="Domaines d’expertise">
-    <div>
+  <!-- Bandeau défilant -->
+  <section
+    class="overflow-hidden bg-ink py-5 font-display text-[clamp(1.75rem,7vw,2.75rem)] leading-none font-medium whitespace-nowrap text-paper uppercase md:text-[clamp(1.75rem,3vw,2.75rem)]"
+    aria-label="Domaines d’expertise"
+  >
+    <div class="inline-block min-w-max animate-ticker motion-reduce:animate-none">
       {
         [false, true].map((hidden) => (
-          <span class="ticker-segment" aria-hidden={hidden ? "true" : undefined}>
+          <span aria-hidden={hidden ? "true" : undefined}>
             {tickerItems.map((item) => (
               <Fragment>
-                {item} <span>/</span>{" "}
+                {item}
+                <span class="mx-4 text-orange">/</span>
               </Fragment>
             ))}
           </span>
@@ -78,75 +122,95 @@ const tickerItems = ["Communication sportive", "Stratégie", "Création de conte
     </div>
   </section>
 
-  <section class="home-projects page-pad">
-    <div class="section-intro">
-      <p class="section-label">01 — Sélection / 02 projets</p>
-      <h2>Des idées<br /><i>qui bougent.</i></h2>
-      <a href="/projets" class="text-link">Les {orderedProjects.length} projets ↗</a>
+  <!-- Sélection de projets -->
+  <section class:list={["py-14 md:py-[clamp(3.5rem,7vw,7rem)]", pad]}>
+    <div class="grid gap-6 md:grid-cols-[0.45fr_1fr_0.35fr] md:items-end md:gap-8">
+      <SectionLabel>01 — Sélection / 02 projets</SectionLabel>
+      <h2 class={sectionTitle}>Des idées<br /><i class="text-orange not-italic">qui bougent.</i></h2>
+      <a href="/projets" class="justify-self-start border-b border-ink pb-1 text-[0.65rem] uppercase md:justify-self-end">
+        Les {orderedProjects.length} projets ↗
+      </a>
     </div>
-    <div class="projects-card-grid projects-card-grid--featured">
+
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 md:mt-16 md:gap-[clamp(1.5rem,3vw,3rem)]">
       {orderedProjects.slice(0, 2).map((project) => <ProjectCard project={project} featured />)}
     </div>
-    <div class="selection-footer">
-      <p>Deux univers, une même exigence : donner du sens à chaque choix créatif.</p>
-    </div>
+
+    <p class="mt-8 max-w-[35rem] border-t border-ink/20 pt-6 text-[0.85rem] leading-relaxed">
+      Deux univers, une même exigence : donner du sens à chaque choix créatif.
+    </p>
   </section>
 
-  <section class="home-presentation page-pad" aria-labelledby="presentation-title">
-    <figure class="presentation-portrait">
-      <Image
-        src={portrait}
-        alt="Valentin Deroo devant une vue panoramique sur une ville à la tombée de la nuit"
-        width={480}
-        height={640}
-      />
-      <figcaption><span>Valentin Deroo</span><span>Sport × Création</span></figcaption>
-    </figure>
-    <div class="presentation-copy">
-      <p class="section-label">02 — Faisons connaissance</p>
-      <h2 id="presentation-title">Le sport me passionne.<br /><span>La communication m’anime.</span></h2>
-      <p class="presentation-lead">Moi, c’est Valentin. Mon objectif : travailler dans la communication sportive.</p>
-      <p>
+  <!-- Présentation -->
+  <section
+    class:list={[
+      "grid items-center gap-10 border-t border-ink/20 bg-sand py-14 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] md:gap-[clamp(2rem,7vw,7rem)] md:py-[clamp(3.5rem,7vw,7rem)]",
+      pad,
+    ]}
+    aria-labelledby="presentation-title"
+  >
+    <Portrait />
+    <div>
+      <SectionLabel>02 — Faisons connaissance</SectionLabel>
+      <h2
+        id="presentation-title"
+        class="my-8 font-display text-[clamp(2.25rem,9vw,4rem)] leading-[1.05] font-medium tracking-[-0.025em] uppercase md:text-[clamp(2.75rem,4.4vw,4rem)]"
+      >
+        Le sport me passionne.<br /><span class="text-orange">La communication m’anime.</span>
+      </h2>
+      <p class="max-w-xl text-[1.15rem] leading-relaxed">
+        Moi, c’est Valentin. Mon objectif : travailler dans la communication sportive.
+      </p>
+      <p class="mt-4 max-w-xl text-[0.95rem] leading-[1.8]">
         Après un parcours en STAPS de 2022 à 2025, je poursuis mes études en MMI de 2025 à 2028.
         Je souhaite mettre cette double culture au service d’un club, d’une marque ou d’un événement sportif.
         Le design et les outils numériques m’aident à donner forme aux messages, mais la communication reste
         au cœur de mon projet.
       </p>
-      <ul class="presentation-focus" aria-label="Mes domaines de formation">
-        <li><span>STAPS · 2022 — 2025</span>Comprendre le sport</li>
-        <li><span>MMI · 2025 — 2028</span>Communiquer et créer des contenus</li>
+      <ul class="my-8 grid gap-6 border-y border-ink/20 py-6 sm:grid-cols-2" aria-label="Mes domaines de formation">
+        <li class="grid gap-2.5 text-[0.85rem]">
+          <span class="font-mono text-[0.7rem]">STAPS · 2022 — 2025</span>Comprendre le sport
+        </li>
+        <li class="grid gap-2.5 text-[0.85rem]">
+          <span class="font-mono text-[0.7rem]">MMI · 2025 — 2028</span>Communiquer et créer des contenus
+        </li>
       </ul>
-      <a href="/a-propos" class="presentation-link">Découvrir mon parcours <span aria-hidden="true">↗</span></a>
+      <a href="/a-propos" class="inline-flex items-center gap-8 border-b border-ink pb-3 text-[0.85rem] hover:text-orange">
+        Découvrir mon parcours <span aria-hidden="true">↗</span>
+      </a>
     </div>
   </section>
 
-  <section class="home-expertise page-pad">
-    <p class="section-label">03 — Savoir-faire / Double culture</p>
-    <div class="expertise-heading">
-      <h2>De la stratégie<br /><i>au terrain.</i></h2>
-      <p>
+  <!-- Savoir-faire -->
+  <section class:list={["bg-ink py-14 text-paper md:py-[clamp(3.5rem,7vw,7rem)]", pad]}>
+    <SectionLabel class="text-orange-soft">03 — Savoir-faire / Double culture</SectionLabel>
+    <div class="mt-12 grid gap-6 md:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)] md:items-end md:gap-8">
+      <h2 class={sectionTitle}>De la stratégie<br /><i class="text-orange-soft not-italic">au terrain.</i></h2>
+      <p class="max-w-[23rem] leading-[1.55] text-paper/85 md:mb-2">
         Comprendre les publics, raconter une histoire et faire rayonner un
         projet sportif. Mes compétences créatives et numériques sont au
         service de cette ambition.
       </p>
     </div>
-    <div class="expertise-list">
+
+    <div class="mt-12 border-t border-paper/30 md:mt-20">
       {
         expertises.map(([title, text], index) => (
-          <div>
-            <span>0{index + 1}</span>
-            <h3>{title}</h3>
-            <p>{text}</p>
+          <div class="grid grid-cols-[2.5rem_minmax(0,1fr)] items-center gap-x-4 gap-y-2 border-b border-paper/30 py-6 transition-all duration-200 hover:bg-paper/[0.035] md:grid-cols-[0.12fr_0.55fr_0.5fr] md:gap-8 md:hover:px-4">
+            <span class="font-mono text-[0.6rem] text-orange-soft">0{index + 1}</span>
+            <h3 class="font-display text-[clamp(1.6rem,7vw,3.25rem)] leading-tight font-medium uppercase md:text-[clamp(1.8rem,3.2vw,3.25rem)]">
+              {title}
+            </h3>
+            <p class="col-start-2 text-[0.95rem] leading-normal text-paper/80 md:col-start-auto">{text}</p>
           </div>
         ))
       }
     </div>
-    <a href="/a-propos" class="expertise-profile-link">Découvrir mon parcours <span aria-hidden="true">↗</span></a>
+
+    <a href="/a-propos" class="mt-8 flex w-fit items-center gap-12 border-b border-paper/50 py-4 text-[0.85rem] hover:text-orange-soft">
+      Découvrir mon parcours <span aria-hidden="true">↗</span>
+    </a>
   </section>
 
-  <a href="/contact" class="contact-banner page-pad">
-    <p>Une idée ou un projet ?</p>
-    <h2>On entre en jeu.</h2>
-    <span>↗</span>
-  </a>
+  <ContactBanner kicker="Une idée ou un projet ?" title="On entre en jeu." class={pad} />
 </Layout>

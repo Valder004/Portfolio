@@ -1,14 +1,11 @@
 // Envoi du formulaire de contact.
 //
-// Aujourd'hui : ouvre l'application mail du visiteur (mailto), comme dans la maquette.
-//
-// Plus tard avec PocketBase :
-//   1. Crée une collection "messages" avec les champs name (text), email (email), message (text)
-//      et autorise la règle "Create" pour tout le monde (laisse List/View/Update/Delete fermées).
-//   2. Renseigne PUBLIC_POCKETBASE_URL dans un fichier .env (voir .env.example).
-//   3. C'est tout : la fonction ci-dessous utilisera automatiquement PocketBase.
+// - Si PUBLIC_POCKETBASE_URL est renseigné (fichier .env), le message est enregistré
+//   dans PocketBase (collection "messages", créée par pocketbase/pb_migrations).
+//   Tu le retrouves ensuite dans l'admin PocketBase.
+// - Sinon, le formulaire ouvre l'application mail du visiteur.
 
-const POCKETBASE_URL = import.meta.env.PUBLIC_POCKETBASE_URL;
+const POCKETBASE_URL = (import.meta.env.PUBLIC_POCKETBASE_URL ?? "").replace(/\/+$/, "");
 
 /**
  * @param {{ name: string, email: string, message: string }} data

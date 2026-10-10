@@ -7,7 +7,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "pb": "cd pocketbase && pocketbase serve"
   },
   "dependencies": {
     "@fontsource/barlow-condensed": "^5.2.0",

@@ -1,8 +1,10 @@
 ---
-import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
+import PageHeading from "../components/PageHeading.astro";
+import SectionLabel from "../components/SectionLabel.astro";
+import ContactBanner from "../components/ContactBanner.astro";
+import Portrait from "../components/Portrait.astro";
 import { expertises } from "../data/projects.js";
-import portrait from "../assets/valentin-portrait.jpg";
 
 const path = [
   {
@@ -27,36 +29,25 @@ const path = [
 ---
 
 <Layout title="À propos" description="Valentin Deroo, étudiant en BUT MMI après une licence STAPS, orienté communication sportive.">
-  <div class="page-pad inner-page about-page">
-    <header class="page-heading about-heading">
-      <p class="section-label">À propos — Profil</p>
-      <h1>La tête dans<br /><i>le jeu.</i></h1>
-    </header>
+  <div class="px-4 pt-12 pb-16 md:px-8 md:pt-[clamp(3rem,6vw,6rem)] md:pb-[clamp(4rem,8vw,8rem)] xl:px-15">
+    <PageHeading label="À propos — Profil" title="La tête dans" accent="le jeu." />
 
-    <section class="about-intro">
-      <figure class="presentation-portrait">
-        <Image
-          src={portrait}
-          alt="Valentin Deroo devant une vue panoramique sur une ville à la tombée de la nuit"
-          width={480}
-          height={640}
-          loading="eager"
-        />
-        <figcaption><span>Valentin Deroo</span><span>Sport × Création</span></figcaption>
-      </figure>
-      <div class="about-copy">
-        <p class="lead">
+    <!-- Introduction -->
+    <section class="grid gap-10 py-16 md:grid-cols-[0.65fr_1.35fr] md:gap-[clamp(2rem,7vw,8rem)] md:py-28">
+      <Portrait eager />
+      <div>
+        <p class="text-[clamp(1.05rem,1.6vw,1.35rem)] leading-[1.7]">
           Je suis Valentin, étudiant en MMI après un parcours en STAPS.
           Je m’oriente vers la communication sportive pour faire vivre les
           histoires des clubs, des marques et des événements.
         </p>
-        <div class="about-columns">
-          <p>
+        <div class="mt-10 grid gap-8 border-t border-ink/20 pt-8 sm:grid-cols-2 md:mt-16">
+          <p class="text-[0.95rem] leading-[1.7]">
             Mon parcours en STAPS nourrit ma compréhension du sport et de
             ses publics. En MMI, je développe mes compétences en stratégie,
             création de contenus et communication digitale.
           </p>
-          <p>
+          <p class="text-[0.95rem] leading-[1.7]">
             Le design et le développement sont des compétences complémentaires :
             je les mobilise pour créer des supports utiles, au service d’un
             message et d’un objectif de communication.
@@ -65,23 +56,26 @@ const path = [
       </div>
     </section>
 
-    <section class="about-path">
-      <p class="section-label">Parcours universitaire</p>
+    <!-- Parcours -->
+    <section class="border-t border-ink py-12 md:py-[clamp(3rem,5vw,5rem)]">
+      <SectionLabel>Parcours universitaire</SectionLabel>
       {
         path.map((step) => (
-          <div class="path-row">
-            <div class="path-date">
-              <span>{step.date}</span>
-              <span class="path-status">{step.status}</span>
+          <div class="grid items-start gap-2 border-b border-ink/20 py-8 sm:grid-cols-[minmax(0,0.35fr)_minmax(0,1fr)] sm:gap-x-6 sm:gap-y-4 lg:grid-cols-[minmax(0,0.3fr)_minmax(0,0.65fr)_minmax(0,1fr)] lg:gap-8">
+            <div class="mb-3 grid grid-cols-[1fr_auto] gap-3 sm:mb-0 sm:grid-cols-1">
+              <span class="font-mono text-[0.7rem]">{step.date}</span>
+              <span class="font-mono text-[0.6rem] text-orange">{step.status}</span>
             </div>
-            <div class="path-degree">
-              <h2>{step.degree}</h2>
-              <p>{step.subtitle}</p>
+            <div class="min-w-0">
+              <h2 class="font-display text-[2.6rem] leading-tight font-medium uppercase">{step.degree}</h2>
+              <p class="mt-2.5 text-[0.85rem] leading-[1.7]">{step.subtitle}</p>
             </div>
-            <div class="path-description">
-              <p>{step.text}</p>
-              <ul aria-label={step.tagsLabel}>
-                {step.tags.map((tag) => <li>{tag}</li>)}
+            <div class="min-w-0 sm:col-start-2 lg:col-start-auto">
+              <p class="text-[0.95rem] leading-[1.7]">{step.text}</p>
+              <ul class="mt-4 flex flex-wrap gap-2" aria-label={step.tagsLabel}>
+                {step.tags.map((tag) => (
+                  <li class="border border-ink/20 px-2.5 py-1 text-[0.7rem] leading-normal">{tag}</li>
+                ))}
               </ul>
             </div>
           </div>
@@ -89,25 +83,34 @@ const path = [
       }
     </section>
 
-    <section class="about-tools">
-      <p class="section-label">Savoir-faire</p>
-      <div class="tool-grid">
+    <!-- Savoir-faire -->
+    <section class="pb-16 md:pb-28">
+      <SectionLabel>Savoir-faire</SectionLabel>
+      <div class="mt-8 grid border-t border-l border-ink sm:grid-cols-2 xl:grid-cols-4">
         {
           expertises.map(([title, text], index) => (
-            <article>
-              <span>0{index + 1}</span>
-              <h2>{title}</h2>
-              <p>{text}</p>
+            <article
+              class:list={[
+                "min-h-[220px] min-w-0 border-r border-b border-ink p-5 md:min-h-[260px]",
+                index === 2 && "bg-sand",
+              ]}
+            >
+              <span class="font-mono text-[0.55rem]">0{index + 1}</span>
+              <h2
+                class:list={[
+                  "mt-12 mb-4 font-display text-[clamp(1.75rem,2.5vw,2.4rem)] leading-[1.1] font-medium wrap-anywhere uppercase md:mt-16",
+                  index === 1 && "text-orange",
+                ]}
+              >
+                {title}
+              </h2>
+              <p class="text-[0.95rem] leading-[1.7] wrap-anywhere">{text}</p>
             </article>
           ))
         }
       </div>
     </section>
 
-    <a href="/contact" class="contact-banner">
-      <p>Envie de construire la suite ensemble ?</p>
-      <h2>Écrivez-moi.</h2>
-      <span>↗</span>
-    </a>
+    <ContactBanner kicker="Envie de construire la suite ensemble ?" title="Écrivez-moi." class="px-5 md:px-8" />
   </div>
 </Layout>

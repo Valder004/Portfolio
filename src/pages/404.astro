@@ -3,9 +3,11 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Page introuvable">
-  <section class="not-found page-pad">
-    <p>Erreur 404</p>
-    <h1>Hors-jeu.</h1>
-    <a href="/">Revenir à l’accueil ↗</a>
+  <section class="flex min-h-[80dvh] flex-col justify-center px-4 md:px-8 xl:px-15">
+    <p class="font-mono text-[0.7rem] uppercase">Erreur 404</p>
+    <h1 class="mt-4 mb-12 font-display text-[clamp(4.5rem,8vw,5.625rem)] leading-[0.8] font-medium text-orange uppercase">
+      Hors-jeu.
+    </h1>
+    <a href="/" class="w-max border-b border-ink pb-1 text-[0.75rem] uppercase hover:text-orange">Revenir à l’accueil ↗</a>
   </section>
 </Layout>

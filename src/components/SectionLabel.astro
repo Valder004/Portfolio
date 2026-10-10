@@ -1,0 +1,6 @@
+---
+// Petit libellé en police mono, utilisé en tête de section (ex. « 01 — Sélection »).
+const { class: className = "", as: Tag = "p" } = Astro.props;
+---
+
+<Tag class:list={["font-mono text-[0.7rem] tracking-[0.08em] uppercase", className]}><slot /></Tag>

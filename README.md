@@ -17,35 +17,45 @@ npm run preview # tester la version de production
 | Je veux changer…                       | Fichier                         |
 | -------------------------------------- | ------------------------------- |
 | Email, téléphone, liens réseaux        | `src/data/site.js`              |
-| Textes et images des projets           | `src/data/projects.js`          |
+| Textes et images des projets           | l'admin PocketBase (ou `src/data/projects.js` sans PocketBase) |
 | L'ordre des projets                    | `gridOrder` dans `projects.js`  |
 | Les pages                              | `src/pages/`                    |
 | En-tête, menu, pied de page            | `src/layouts/Layout.astro`      |
-| Couleurs, polices, styles              | `src/styles/global.css`         |
+| Mise en page, tailles, espacements     | les classes Tailwind dans chaque `.astro` |
+| Couleurs, polices (thème)              | `@theme` dans `src/styles/global.css` |
 | Images                                 | `src/assets/` (optimisées automatiquement) |
 
-Les couleurs de la maquette sont aussi disponibles en classes Tailwind :
-`bg-paper`, `bg-ink`, `text-orange`, `bg-sand`, `font-display`, `font-mono`…
+Tout le style est écrit en **classes Tailwind**, directement dans le HTML des fichiers `.astro`,
+en *mobile first* : les classes sans préfixe s'appliquent au téléphone, puis `sm:` (≥ 640 px),
+`md:` (≥ 768 px, menu horizontal), `lg:` (≥ 1024 px) et `xl:` (≥ 1280 px) adaptent l'affichage
+aux écrans plus grands.
+
+Couleurs du thème : `paper`, `paper-light`, `sand`, `stone`, `ink`, `orange`, `orange-soft`
+(ex. `bg-paper`, `text-orange`, `border-ink/20`). Polices : `font-sans`, `font-display`, `font-mono`.
 
 ## Structure
 
 ```
+pocketbase/        migrations + images de départ (voir pocketbase/README.md)
 src/
 ├── assets/        images (converties en WebP et redimensionnées au build)
-├── components/    ProjectCard, ProjectImage (avec visionneuse)
+├── components/    ProjectCard, ProjectImage, PageHeading, SectionLabel, ContactBanner, Portrait
 ├── data/          contenus : site.js, projects.js
 ├── layouts/       Layout.astro
-├── lib/           contact.js (envoi du formulaire)
+├── lib/           contact.js (formulaire) et projects.js (lecture des projets, PocketBase ou local)
 ├── pages/         une page = une URL
 ├── scripts/       menu mobile, visionneuse d'images
-└── styles/        global.css
+└── styles/        global.css (thème Tailwind + base)
 ```
 
-## PocketBase (plus tard)
+## PocketBase
 
-Le formulaire de contact ouvre pour l'instant l'application mail du visiteur.
-Pour l'envoyer vers PocketBase, suis les étapes en haut de `src/lib/contact.js`,
-puis copie `.env.example` en `.env` et renseigne `PUBLIC_POCKETBASE_URL`.
+Le formulaire de contact et les projets peuvent être gérés avec **PocketBase** :
+tout est prêt dans le dossier [`pocketbase/`](pocketbase/README.md) (collections, données de départ, mode d'emploi).
 
-Les projets pourront aussi être stockés dans PocketBase : il suffira de remplacer
-le contenu de `src/data/projects.js` par une requête à l'API.
+```bash
+npm run pb      # lance PocketBase (admin sur http://127.0.0.1:8090/_/)
+```
+
+Puis crée un fichier `.env` avec `PUBLIC_POCKETBASE_URL=http://127.0.0.1:8090`.
+Sans `.env`, le site fonctionne avec `src/data/projects.js` et l'envoi par application mail.

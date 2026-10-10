@@ -1,0 +1,21 @@
+---
+// Grand bandeau orange qui mène à la page Contact.
+const { kicker, title, href = "/contact", class: className = "" } = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={[
+    "group relative block border-y border-ink bg-orange py-14 pr-20 text-ink md:py-[clamp(3.5rem,6vw,5.5rem)] md:pr-[clamp(5rem,10vw,10rem)] xl:pr-[clamp(5rem,10vw,10rem)]",
+    className,
+  ]}
+>
+  <p class="mb-4 font-mono text-[0.72rem] tracking-[0.06em] uppercase">{kicker}</p>
+  <h2 class="font-display text-[clamp(3rem,13vw,5.625rem)] leading-[0.9] font-medium uppercase md:text-[clamp(3.5rem,6vw,5.625rem)]">
+    {title}
+  </h2>
+  <span
+    class="absolute top-1/2 right-[clamp(1rem,4vw,4rem)] -translate-y-1/2 text-[clamp(2.5rem,4vw,4rem)] transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-[calc(50%+4px)]"
+    aria-hidden="true">↗</span
+  >
+</a>

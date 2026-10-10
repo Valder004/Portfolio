@@ -1,10 +1,12 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import ProjectImage from "../../components/ProjectImage.astro";
-import { orderedProjects } from "../../data/projects.js";
+import SectionLabel from "../../components/SectionLabel.astro";
+import { getProjects } from "../../lib/projects.js";
 
 // Une page est générée pour chaque projet au moment du build.
-export function getStaticPaths() {
+export async function getStaticPaths() {
+  const orderedProjects = await getProjects();
   return orderedProjects.map((project, index) => ({
     params: { slug: project.slug },
     props: { project, nextProject: orderedProjects[(index + 1) % orderedProjects.length] },
@@ -12,131 +14,173 @@ export function getStaticPaths() {
 }
 
 const { project, nextProject } = Astro.props;
+
+const pad = "px-4 md:px-8 xl:px-15";
+const bodyText = "text-[clamp(1.05rem,1.6vw,1.35rem)] leading-[1.7]";
+const smallText = "text-[0.95rem] leading-[1.8]";
+const subTitle = "font-display font-medium uppercase leading-[1.1] text-[clamp(2rem,3.5vw,3.5rem)]";
 ---
 
 <Layout title={project.title} description={`${project.title} — ${project.intro}`}>
-  <div class="project-detail">
-    <header class="project-detail-hero page-pad">
-      <div class="detail-topline">
-        <a href="/projets">← Tous les projets</a>
-        <span>{project.discipline}</span>
-        <span>{project.year}</span>
-      </div>
-      <p class="section-label">Projet — {project.number}</p>
-      <h1>{project.title}</h1>
-      <p class="detail-intro">{project.intro}</p>
+  <!-- En-tête du projet -->
+  <header class:list={["border-b border-ink pt-12 pb-12 md:pt-[clamp(3rem,7vw,7rem)] md:pb-[clamp(3rem,6vw,6rem)]", pad]}>
+    <div
+      class="mb-10 grid grid-cols-[1fr_auto] gap-x-8 border-b border-ink/20 pb-4 font-mono text-[0.55rem] uppercase sm:grid-cols-[1fr_auto_auto] md:mb-[clamp(2.5rem,5vw,5rem)]"
+    >
+      <a href="/projets" class="w-max hover:text-orange">← Tous les projets</a>
+      <span class="hidden sm:block">{project.discipline}</span>
+      <span>{project.year}</span>
+    </div>
+
+    <SectionLabel class="text-orange">Projet — {project.number}</SectionLabel>
+    <h1
+      class="mt-4 mb-8 font-display text-[clamp(2.75rem,12vw,5.625rem)] leading-[0.9] font-medium tracking-[-0.05em] text-orange uppercase md:text-[clamp(4rem,7vw,5.625rem)]"
+    >
+      {project.title}
+    </h1>
+    <p class:list={["mt-8 max-w-[42rem] md:ml-auto", bodyText]}>{project.intro}</p>
+
+    {
+      project.websiteUnavailable && (
+        <div class="mt-6 max-w-[42rem] border-l-[3px] border-orange bg-sand px-5 py-4 md:ml-auto">
+          <strong class="block text-[0.9rem] font-normal">Site temporairement indisponible</strong>
+          <p class="mt-2 text-[0.85rem] leading-[1.7]">
+            {project.title} est actuellement hors ligne. Les captures ci-dessous permettent de découvrir le projet en
+            attendant son retour.
+          </p>
+        </div>
+      )
+    }
+    {
+      project.website && !project.websiteUnavailable && (
+        <a
+          class="mt-6 flex min-h-11 w-fit items-center gap-8 bg-orange px-5 py-3 text-[0.85rem] transition-colors hover:bg-ink hover:text-paper md:ml-auto"
+          href={project.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Voir le site ${project.title} (nouvel onglet)`}
+        >
+          Voir le site <span aria-hidden="true">↗</span>
+        </a>
+      )
+    }
+  </header>
+
+  <!-- Visuel principal + objectif -->
+  <section
+    class:list={[
+      "grid items-center gap-8 py-8 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-[clamp(2rem,5vw,5rem)] md:py-[clamp(2rem,4vw,4rem)]",
+      pad,
+    ]}
+  >
+    <div class="w-full overflow-hidden border border-ink/20 bg-stone sm:max-w-[360px] sm:justify-self-center">
+      <ProjectImage image={project.image} alt={project.alt} title={project.title} sizes="(min-width: 640px) 360px, 100vw" />
+    </div>
+    <aside>
+      <SectionLabel>{project.discipline} / {project.year}</SectionLabel>
+      <h2 class="my-6 font-display text-[clamp(2.25rem,3.6vw,3.5rem)] leading-[1.05] font-medium uppercase">L’objectif</h2>
+      <p class="max-w-[30rem] leading-[1.7]">{project.objective}</p>
+    </aside>
+  </section>
+
+  <!-- Contexte, rôle, livrables -->
+  <section
+    class:list={[
+      "grid gap-12 border-t border-ink py-14 md:grid-cols-[minmax(0,1.3fr)_minmax(220px,0.7fr)] md:gap-[clamp(3rem,8vw,9rem)] md:py-[clamp(4rem,8vw,8rem)]",
+      pad,
+    ]}
+  >
+    <div>
+      <SectionLabel>Contexte</SectionLabel>
+      <p class:list={["mt-8 max-w-[55rem]", bodyText]}>{project.context}</p>
       {
-        project.websiteUnavailable && (
-          <div class="project-site-notice">
-            <strong>Site temporairement indisponible</strong>
-            <p>
-              {project.title} est actuellement hors ligne. Les captures ci-dessous permettent de découvrir le
-              projet en attendant son retour.
-            </p>
-          </div>
-        )
-      }
-      {
-        project.website && !project.websiteUnavailable && (
-          <a
-            class="project-website-link"
-            href={project.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Voir le site ${project.title} (nouvel onglet)`}
-          >
-            Voir le site <span aria-hidden="true">↗</span>
-          </a>
-        )
-      }
-    </header>
-
-    <section class="detail-cover page-pad">
-      <div>
-        <ProjectImage
-          image={project.image}
-          alt={project.alt}
-          title={project.title}
-          class="detail-image-trigger"
-          sizes="(max-width: 820px) 100vw, 360px"
-        />
-      </div>
-      <aside class="detail-cover-summary">
-        <p class="section-label">{project.discipline} / {project.year}</p>
-        <h2>L’objectif</h2>
-        <p>{project.objective}</p>
-      </aside>
-    </section>
-
-    <section class="detail-overview page-pad">
-      <div>
-        <p class="section-label">Contexte</p>
-        <p class="detail-lead">{project.context}</p>
-        {
-          project.gallery?.map((visual) => (
-            <figure class="detail-inline-visual">
-              <ProjectImage
-                image={visual.image}
-                alt={visual.alt}
-                title={`${project.title} — ${visual.title}`}
-                class="project-gallery-image"
-                sizes="(max-width: 820px) 100vw, 60vw"
-              />
-            </figure>
-          ))
-        }
-      </div>
-      <aside>
-        <p class="section-label">Mon rôle</p>
-        <p>{project.role}</p>
-        <p class="section-label">Livrables</p>
-        <ul>
-          {project.deliverables.map((deliverable) => <li>{deliverable}</li>)}
-        </ul>
-      </aside>
-    </section>
-
-    <section class="detail-process page-pad">
-      <article>
-        <span>01</span>
-        <p class="section-label">Le public</p>
-        <h2>{project.audience}</h2>
-      </article>
-      <article>
-        <span>02</span>
-        <p class="section-label">Le message</p>
-        <h2>{project.message}</h2>
-        <p class="detail-approach">{project.approach}</p>
-      </article>
-    </section>
-
-    <section class="detail-choices page-pad" aria-labelledby="choices-heading">
-      <p class="section-label">Démarche de communication</p>
-      <h2 id="choices-heading">Les choix derrière le projet</h2>
-      {
-        project.choices.map((choice, index) => (
-          <article class="detail-choice-row">
-            <span>0{index + 1}</span>
-            <h3>{choice.title}</h3>
-            <p>{choice.text}</p>
-          </article>
+        project.gallery?.map((visual) => (
+          <figure class="mt-6">
+            <ProjectImage
+              image={visual.image}
+              alt={visual.alt}
+              title={`${project.title} — ${visual.title}`}
+              class="border border-ink/20 bg-paper"
+              sizes="(min-width: 768px) 60vw, 100vw"
+            />
+          </figure>
         ))
       }
-    </section>
+    </div>
+    <aside>
+      <SectionLabel>Mon rôle</SectionLabel>
+      <p class="mt-4 mb-12 text-[0.85rem] leading-[1.55]">{project.role}</p>
+      <SectionLabel>Livrables</SectionLabel>
+      <ul class="mt-4 border-t border-ink/20">
+        {project.deliverables.map((deliverable) => <li class="border-b border-ink/20 py-3 text-[0.75rem]">{deliverable}</li>)}
+      </ul>
+    </aside>
+  </section>
 
-    <section class="detail-result page-pad">
-      <p class="section-label">Résultat</p>
-      <p>{project.result}</p>
-      <div class="detail-perspective">
-        <p class="section-label">Ce que ce projet illustre</p>
-        <p>{project.perspective}</p>
-      </div>
-    </section>
+  <!-- Public et message -->
+  <section class:list={["grid gap-6 py-14 md:grid-cols-2 md:py-[clamp(4rem,8vw,8rem)]", pad]}>
+    {
+      [
+        { label: "Le public", text: project.audience },
+        { label: "Le message", text: project.message, extra: project.approach },
+      ].map((block, index) => (
+        <article
+          class:list={[
+            "relative min-h-[320px] border border-ink/20 p-6 md:min-h-[360px] md:p-[clamp(1.5rem,4vw,4rem)]",
+            index === 1 && "bg-sand",
+          ]}
+        >
+          <span class="absolute top-6 right-6 font-mono text-[0.65rem] text-orange">0{index + 1}</span>
+          <SectionLabel>{block.label}</SectionLabel>
+          <h2 class="mt-16 max-w-[35rem] text-[clamp(1.1rem,1.7vw,1.4rem)] leading-[1.7] font-normal">{block.text}</h2>
+          {block.extra && <p class:list={["mt-6 border-t border-ink/20 pt-4", smallText]}>{block.extra}</p>}
+        </article>
+      ))
+    }
+  </section>
 
-    <a href={`/projets/${nextProject.slug}`} class="next-project page-pad">
-      <span>Projet suivant</span>
-      <h2>{nextProject.title}</h2>
-      <strong>↗</strong>
-    </a>
-  </div>
+  <!-- Choix de communication -->
+  <section class:list={["py-8 md:py-[clamp(2rem,5vw,5rem)]", pad]} aria-labelledby="choices-heading">
+    <SectionLabel>Démarche de communication</SectionLabel>
+    <h2 id="choices-heading" class:list={["mt-6 mb-8", subTitle]}>Les choix derrière le projet</h2>
+    {
+      project.choices.map((choice, index) => (
+        <article class="grid grid-cols-[2rem_minmax(0,1fr)] gap-x-4 gap-y-3 border-t border-ink/20 py-7 md:grid-cols-[2rem_minmax(0,0.7fr)_minmax(0,1fr)] md:gap-8">
+          <span class="font-mono text-[0.7rem] text-orange">0{index + 1}</span>
+          <h3 class="font-display text-[1.8rem] leading-[1.2] font-medium">{choice.title}</h3>
+          <p class:list={["col-start-2 md:col-start-auto", smallText]}>{choice.text}</p>
+        </article>
+      ))
+    }
+  </section>
+
+  <!-- Résultat -->
+  <section class:list={["py-20 md:py-[clamp(5rem,10vw,10rem)]", pad]}>
+    <SectionLabel>Résultat</SectionLabel>
+    <p class:list={["mt-8 max-w-[62rem] md:ml-auto", bodyText]}>{project.result}</p>
+    <div class="mt-8 grid gap-4 border-t border-ink/20 pt-8 md:grid-cols-[minmax(0,0.4fr)_minmax(0,1fr)] md:gap-8">
+      <SectionLabel>Ce que ce projet illustre</SectionLabel>
+      <p class={smallText}>{project.perspective}</p>
+    </div>
+  </section>
+
+  <!-- Projet suivant -->
+  <a
+    href={`/projets/${nextProject.slug}`}
+    class:list={[
+      "group relative block border-y border-ink bg-orange py-12 pr-20 md:py-[clamp(3rem,6vw,6rem)] md:pr-[clamp(5rem,10vw,10rem)] xl:pr-[clamp(5rem,10vw,10rem)]",
+      pad,
+    ]}
+  >
+    <span class="font-mono text-[0.55rem] uppercase">Projet suivant</span>
+    <h2
+      class="mt-4 font-display text-[clamp(2.5rem,11vw,5.625rem)] leading-[0.9] font-medium uppercase md:text-[clamp(3.5rem,6vw,5.625rem)]"
+    >
+      {nextProject.title}
+    </h2>
+    <strong
+      class="absolute right-[clamp(1rem,4vw,4rem)] bottom-8 text-[clamp(2.5rem,5vw,5rem)] font-normal transition-transform duration-200 group-hover:rotate-45"
+      aria-hidden="true">↗</strong
+    >
+  </a>
 </Layout>

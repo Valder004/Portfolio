@@ -2,19 +2,22 @@
 // Image cliquable qui s'ouvre en grand (voir src/scripts/lightbox.js).
 import { Image } from "astro:assets";
 
-const { image, alt, title, class: className = "", number, sizes = "(max-width: 820px) 100vw, 50vw" } = Astro.props;
+const { image, alt, title, class: className = "", sizes = "(min-width: 768px) 50vw, 100vw" } = Astro.props;
 ---
 
 <button
   type="button"
-  class={`project-image-trigger ${className}`}
+  class:list={["group/zoom relative block w-full cursor-zoom-in p-0", className]}
   aria-label={`Agrandir le visuel de ${title}`}
   aria-haspopup="dialog"
-  data-lightbox-src={image.src}
+  data-lightbox-src={typeof image === "string" ? image : image.src}
   data-lightbox-alt={alt}
   data-lightbox-title={title}
 >
-  <Image src={image} alt={alt} widths={[480, 800, 1200, 1600]} sizes={sizes} />
-  {number && <span>{number}</span>}
-  <small class="image-enlarge-label">Agrandir le visuel <b aria-hidden="true">⤢</b></small>
+  <Image src={image} alt={alt} inferSize={typeof image === "string"} widths={[480, 800, 1200, 1600]} sizes={sizes} class="block h-auto w-full" />
+  <small
+    class="absolute bottom-2.5 left-1/2 flex -translate-x-1/2 items-center gap-3 bg-ink px-3.5 py-2.5 text-[0.7rem] whitespace-nowrap text-paper transition-colors group-hover/zoom:bg-orange group-hover/zoom:text-ink"
+  >
+    Agrandir le visuel <b class="text-base font-normal" aria-hidden="true">⤢</b>
+  </small>
 </button>

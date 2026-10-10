@@ -1,11 +1,12 @@
 // Menu mobile : ouverture/fermeture, Échap, piège du focus, fermeture au redimensionnement.
+// L'apparence est gérée en Tailwind via [data-open] (menu) et aria-expanded (bouton).
 
-const shell = document.querySelector("[data-shell]");
 const toggle = document.querySelector("[data-menu-toggle]");
 const label = document.querySelector("[data-menu-label]");
 const menu = document.querySelector("[data-menu]");
+const DESKTOP = window.matchMedia("(min-width: 48rem)"); // = breakpoint md de Tailwind
 
-if (shell && toggle && menu) {
+if (toggle && menu) {
   const links = Array.from(menu.querySelectorAll("a"));
   let open = false;
   let previousOverflow = "";
@@ -17,20 +18,17 @@ if (shell && toggle && menu) {
     toggle.setAttribute("aria-expanded", String(open));
     toggle.setAttribute("aria-label", open ? "Fermer le menu" : "Ouvrir le menu");
     if (label) label.textContent = open ? "Fermer" : "Menu";
-    menu.classList.toggle("open", open);
-    shell.classList.toggle("menu-is-open", open);
+    menu.toggleAttribute("data-open", open);
 
     if (open) {
       previousOverflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       links[0]?.focus();
       document.addEventListener("keydown", onKeydown);
-      window.addEventListener("resize", onResize);
     } else {
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", onKeydown);
-      window.removeEventListener("resize", onResize);
-      toggle.focus();
+      if (!DESKTOP.matches) toggle.focus();
     }
   }
 
@@ -51,10 +49,9 @@ if (shell && toggle && menu) {
     }
   }
 
-  function onResize() {
-    if (window.innerWidth > 820) setOpen(false);
-  }
-
   toggle.addEventListener("click", () => setOpen(!open));
   links.forEach((link) => link.addEventListener("click", () => setOpen(false)));
+  DESKTOP.addEventListener("change", (event) => {
+    if (event.matches) setOpen(false);
+  });
 }
