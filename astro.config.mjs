@@ -19,7 +19,7 @@ if (PUBLIC_POCKETBASE_URL) {
 // https://astro.build/config
 export default defineConfig({
   // Adresse finale du site (utile pour le référencement)
-  site: "https://valentin-deroo.fr",
+  site: site: "https://portfolio.valentin-deroo.fr",,
   image: {
     remotePatterns,
   },
