@@ -4,7 +4,7 @@ export const site = {
   tagline: "Communication sportive",
   title: "Valentin Deroo — Communication sportive",
   description:
-    "Portfolio de Valentin Deroo, étudiant en BUT MMI après une licence STAPS, orienté communication sportive : stratégie, contenus et événementiel.",
+    "Portfolio de Valentin Deroo, étudiant en BUT MMI après une L2 STAPS, orienté communication sportive : stratégie, contenus et événementiel.",
   email: "Valder004@gmail.com",
   phone: { display: "07 71 63 64 90", href: "tel:+33771636490" },
   // TODO : remplace par tes vrais profils
