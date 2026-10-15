@@ -7,8 +7,11 @@ import Portrait from "../components/Portrait.astro";
 import Button from "../components/Button.astro";
 import Stripes from "../components/Stripes.astro";
 import { expertises } from "../data/projects.js";
-import { getProjects } from "../lib/projects.js";
+import { getProjects, cacheProjectsPage } from "../lib/projects.js";
 import heroPhoto from "../assets/match-nuit.jpg";
+
+export const prerender = false;
+cacheProjectsPage(Astro);
 
 const projects = await getProjects();
 const featured = projects.slice(0, 2);

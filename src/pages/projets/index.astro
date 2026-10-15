@@ -2,7 +2,10 @@
 import Layout from "../../layouts/Layout.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
 import PageHeading from "../../components/PageHeading.astro";
-import { getProjects } from "../../lib/projects.js";
+import { getProjects, cacheProjectsPage } from "../../lib/projects.js";
+
+export const prerender = false;
+cacheProjectsPage(Astro);
 
 const projects = await getProjects();
 ---

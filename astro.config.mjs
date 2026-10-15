@@ -2,6 +2,7 @@
 import { defineConfig } from "astro/config";
 import { loadEnv } from "vite";
 import tailwindcss from "@tailwindcss/vite";
+import netlify from "@astrojs/netlify";
 
 // Lit le fichier .env pour autoriser Astro à optimiser les images venant de PocketBase
 const { PUBLIC_POCKETBASE_URL } = loadEnv(process.env.NODE_ENV ?? "development", process.cwd(), "");
@@ -19,7 +20,9 @@ if (PUBLIC_POCKETBASE_URL) {
 // https://astro.build/config
 export default defineConfig({
   // Adresse finale du site (utile pour le référencement)
-  site: site: "https://portfolio.valentin-deroo.fr",,
+  site: "https://portfolio.valentin-deroo.fr",
+  // Les pages de projets sont générées à la demande sur Netlify (données PocketBase à jour)
+  adapter: netlify(),
   image: {
     remotePatterns,
   },

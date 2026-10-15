@@ -4,8 +4,8 @@
 //   PocketBase (collection "projects", uniquement ceux cochés "published").
 // - Sinon, ou si PocketBase ne répond pas, le site utilise src/data/projects.js.
 //
-// Le site est statique : les projets sont lus au moment du `npm run build`
-// (et à chaque rechargement de page en `npm run dev`).
+// Les pages qui affichent des projets sont générées à la demande (prerender = false) :
+// les données sont relues dans PocketBase, avec 60 s de cache chez Netlify.
 
 import { orderedProjects as localProjects } from "../data/projects.js";
 
@@ -48,13 +48,9 @@ export function toProject(record, index) {
   };
 }
 
-let cache;
-
 /** @returns {Promise<Array>} les projets triés et numérotés (01, 02…) */
 export async function getProjects() {
-  // En production (build) on ne charge qu'une fois ; en dev on relit à chaque page.
-  if (cache && import.meta.env.PROD) return cache;
-  if (!POCKETBASE_URL) return (cache = localProjects);
+  if (!POCKETBASE_URL) return localProjects;
 
   try {
     const params = new URLSearchParams({ sort: "order", perPage: "100", filter: "published = true" });
@@ -62,12 +58,20 @@ export async function getProjects() {
     if (!response.ok) throw new Error(`réponse ${response.status}`);
     const { items } = await response.json();
     if (!items?.length) throw new Error("aucun projet publié");
-    cache = items.filter((record) => record.image).map(toProject);
-    return cache;
+    return items.filter((record) => record.image).map(toProject);
   } catch (error) {
     console.warn(`[projets] PocketBase indisponible (${error.message}) → projets locaux utilisés.`);
     return localProjects;
   }
+}
+
+/**
+ * Page générée à la demande : Netlify garde le résultat 60 s en cache,
+ * puis le régénère avec les données à jour de PocketBase.
+ */
+export function cacheProjectsPage(Astro) {
+  Astro.response.headers.set("Cache-Control", "public, max-age=0, must-revalidate");
+  Astro.response.headers.set("Netlify-CDN-Cache-Control", "public, durable, s-maxage=60, stale-while-revalidate=604800");
 }
 
 /** Discipline + année pour l'affichage, ex. « Communication, UX/UI, Dev (2026) » */

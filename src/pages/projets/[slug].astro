@@ -2,18 +2,18 @@
 import Layout from "../../layouts/Layout.astro";
 import ProjectImage from "../../components/ProjectImage.astro";
 import Button from "../../components/Button.astro";
-import { getProjects, projectMeta } from "../../lib/projects.js";
+import { getProjects, projectMeta, cacheProjectsPage } from "../../lib/projects.js";
 
-// Une page est générée pour chaque projet au moment du build.
-export async function getStaticPaths() {
-  const projects = await getProjects();
-  return projects.map((project, index) => ({
-    params: { slug: project.slug },
-    props: { project, nextProject: projects[(index + 1) % projects.length] },
-  }));
-}
+// Page générée à la demande : le projet est relu dans PocketBase.
+export const prerender = false;
 
-const { project, nextProject } = Astro.props;
+const projects = await getProjects();
+const index = projects.findIndex((item) => item.slug === Astro.params.slug);
+if (index === -1) return Astro.rewrite("/404");
+
+cacheProjectsPage(Astro);
+const project = projects[index];
+const nextProject = projects[(index + 1) % projects.length];
 
 const container = "mx-auto max-w-7xl px-5 md:px-8";
 const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppercase";
