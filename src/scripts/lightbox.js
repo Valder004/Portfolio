@@ -5,16 +5,16 @@ const triggers = document.querySelectorAll("[data-lightbox-src]");
 if (triggers.length) {
   const dialog = document.createElement("dialog");
   dialog.className =
-    "fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none border-0 bg-[rgb(12_12_12/0.97)] p-4 text-paper backdrop:bg-black/85 open:grid open:grid-rows-[auto_minmax(0,1fr)_auto] open:gap-4 md:p-8";
+    "fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none border-0 bg-[rgb(22_22_22/0.97)] p-4 text-white backdrop:bg-black/85 open:grid open:grid-rows-[auto_minmax(0,1fr)_auto] open:gap-4 md:p-8";
   dialog.innerHTML = `
     <div class="flex items-center justify-between gap-4">
-      <p class="text-[0.95rem]" data-lb-title><span class="mt-1 block text-[0.7rem] text-orange-soft">Vue intégrale</span></p>
-      <button type="button" class="flex min-h-11 cursor-pointer items-center gap-4 border border-paper/40 px-4 py-2" data-lb-close aria-label="Fermer le visuel agrandi">
-        Fermer <span class="text-2xl" aria-hidden="true">×</span>
+      <p class="font-semibold" data-lb-title></p>
+      <button type="button" class="flex min-h-11 cursor-pointer items-center gap-4 border-2 border-white px-4 py-2 font-semibold hover:bg-white hover:text-ink" data-lb-close aria-label="Fermer le visuel agrandi">
+        Fermer
       </button>
     </div>
     <img class="pointer-events-none block size-full min-h-0 object-contain" alt="" data-lb-image />
-    <p class="pointer-events-none text-center text-[0.7rem] text-paper/70">Échap ou touchez autour de l’image pour fermer</p>
+    <p class="pointer-events-none text-center text-sm text-white/70">Échap ou touchez autour de l’image pour fermer</p>
   `;
   document.body.append(dialog);
 
@@ -24,7 +24,7 @@ if (triggers.length) {
   let previousOverflow = "";
   let lastTrigger = null;
 
-  // Nœud texte placé avant « Vue intégrale » pour afficher le titre du projet
+  // Nœud texte qui reçoit le titre du projet
   const titleText = document.createTextNode("");
   title.prepend(titleText);
 

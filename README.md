@@ -30,8 +30,9 @@ en *mobile first* : les classes sans préfixe s'appliquent au téléphone, puis 
 `md:` (≥ 768 px, menu horizontal), `lg:` (≥ 1024 px) et `xl:` (≥ 1280 px) adaptent l'affichage
 aux écrans plus grands.
 
-Couleurs du thème : `paper`, `paper-light`, `sand`, `stone`, `ink`, `orange`, `orange-soft`
-(ex. `bg-paper`, `text-orange`, `border-ink/20`). Polices : `font-sans`, `font-display`, `font-mono`.
+Couleurs du thème (celles du logo) : `white`, `chalk`, `ink`, `orange`, `orange-dark`, `slate`
+(ex. `bg-chalk`, `text-orange`, `border-ink`). Polices : `font-varsity` (Graduate, titres) et `font-sans` (Archivo, texte).
+Le liseré rayé façon maillot est le composant `Stripes.astro`.
 
 ## Structure
 
@@ -39,7 +40,7 @@ Couleurs du thème : `paper`, `paper-light`, `sand`, `stone`, `ink`, `orange`, `
 pocketbase/        migrations + images de départ (voir pocketbase/README.md)
 src/
 ├── assets/        images (converties en WebP et redimensionnées au build)
-├── components/    ProjectCard, ProjectImage, PageHeading, SectionLabel, ContactBanner, Portrait
+├── components/    ProjectCard, ProjectImage, PageHeading, ContactBanner, Portrait, Button, Stripes, Logo
 ├── data/          contenus : site.js, projects.js
 ├── layouts/       Layout.astro
 ├── lib/           contact.js (formulaire) et projects.js (lecture des projets, PocketBase ou local)

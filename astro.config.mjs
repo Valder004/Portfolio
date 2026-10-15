@@ -18,8 +18,8 @@ if (PUBLIC_POCKETBASE_URL) {
 
 // https://astro.build/config
 export default defineConfig({
-  // Remplace par l'URL finale du site une fois en ligne (utile pour le SEO).
-  site: "https://example.com",
+  // Adresse finale du site (utile pour le référencement)
+  site: "https://valentin-deroo.fr",
   image: {
     remotePatterns,
   },

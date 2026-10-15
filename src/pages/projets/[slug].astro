@@ -1,186 +1,141 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import ProjectImage from "../../components/ProjectImage.astro";
-import SectionLabel from "../../components/SectionLabel.astro";
-import { getProjects } from "../../lib/projects.js";
+import Button from "../../components/Button.astro";
+import { getProjects, projectMeta } from "../../lib/projects.js";
 
 // Une page est générée pour chaque projet au moment du build.
 export async function getStaticPaths() {
-  const orderedProjects = await getProjects();
-  return orderedProjects.map((project, index) => ({
+  const projects = await getProjects();
+  return projects.map((project, index) => ({
     params: { slug: project.slug },
-    props: { project, nextProject: orderedProjects[(index + 1) % orderedProjects.length] },
+    props: { project, nextProject: projects[(index + 1) % projects.length] },
   }));
 }
 
 const { project, nextProject } = Astro.props;
 
-const pad = "px-4 md:px-8 xl:px-15";
-const bodyText = "text-[clamp(1.05rem,1.6vw,1.35rem)] leading-[1.7]";
-const smallText = "text-[0.95rem] leading-[1.8]";
-const subTitle = "font-display font-medium uppercase leading-[1.1] text-[clamp(2rem,3.5vw,3.5rem)]";
+const container = "mx-auto max-w-7xl px-5 md:px-8";
+const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppercase";
 ---
 
-<Layout title={project.title} description={`${project.title} — ${project.intro}`}>
+<Layout title={project.title} description={`${project.title} : ${project.intro}`}>
   <!-- En-tête du projet -->
-  <header class:list={["border-b border-ink pt-12 pb-12 md:pt-[clamp(3rem,7vw,7rem)] md:pb-[clamp(3rem,6vw,6rem)]", pad]}>
-    <div
-      class="mb-10 grid grid-cols-[1fr_auto] gap-x-8 border-b border-ink/20 pb-4 font-mono text-[0.55rem] uppercase sm:grid-cols-[1fr_auto_auto] md:mb-[clamp(2.5rem,5vw,5rem)]"
-    >
-      <a href="/projets" class="w-max hover:text-orange">← Tous les projets</a>
-      <span class="hidden sm:block">{project.discipline}</span>
-      <span>{project.year}</span>
-    </div>
-
-    <SectionLabel class="text-orange">Projet — {project.number}</SectionLabel>
-    <h1
-      class="mt-4 mb-8 font-display text-[clamp(2.75rem,12vw,5.625rem)] leading-[0.9] font-medium tracking-[-0.05em] text-orange uppercase md:text-[clamp(4rem,7vw,5.625rem)]"
-    >
+  <header class:list={[container, "pt-10 pb-12 md:pt-14 md:pb-16"]}>
+    <a href="/projets" class="font-semibold underline decoration-2 underline-offset-4 hover:text-orange">Tous les projets</a>
+    <h1 class="mt-8 max-w-5xl font-varsity text-[clamp(2rem,8vw,5rem)] leading-[0.95] text-orange uppercase">
       {project.title}
     </h1>
-    <p class:list={["mt-8 max-w-[42rem] md:ml-auto", bodyText]}>{project.intro}</p>
+    <p class="mt-4 text-lg font-semibold">{projectMeta(project)}</p>
+    <p class="mt-6 max-w-3xl text-xl leading-relaxed md:text-2xl">{project.intro}</p>
 
     {
       project.websiteUnavailable && (
-        <div class="mt-6 max-w-[42rem] border-l-[3px] border-orange bg-sand px-5 py-4 md:ml-auto">
-          <strong class="block text-[0.9rem] font-normal">Site temporairement indisponible</strong>
-          <p class="mt-2 text-[0.85rem] leading-[1.7]">
-            {project.title} est actuellement hors ligne. Les captures ci-dessous permettent de découvrir le projet en
-            attendant son retour.
-          </p>
-        </div>
+        <p class="mt-6 max-w-3xl border-l-4 border-orange bg-chalk px-5 py-4 leading-relaxed">
+          <strong>Site temporairement hors ligne.</strong> Les captures ci-dessous permettent de découvrir {project.title} en attendant son retour.
+        </p>
       )
     }
     {
       project.website && !project.websiteUnavailable && (
-        <a
-          class="mt-6 flex min-h-11 w-fit items-center gap-8 bg-orange px-5 py-3 text-[0.85rem] transition-colors hover:bg-ink hover:text-paper md:ml-auto"
-          href={project.website}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`Voir le site ${project.title} (nouvel onglet)`}
-        >
-          Voir le site <span aria-hidden="true">↗</span>
-        </a>
+        <Button href={project.website} variant="orange" class="mt-8" target="_blank" rel="noopener noreferrer">
+          Voir le site (nouvel onglet)
+        </Button>
       )
     }
   </header>
 
-  <!-- Visuel principal + objectif -->
-  <section
-    class:list={[
-      "grid items-center gap-8 py-8 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-[clamp(2rem,5vw,5rem)] md:py-[clamp(2rem,4vw,4rem)]",
-      pad,
-    ]}
-  >
-    <div class="w-full overflow-hidden border border-ink/20 bg-stone sm:max-w-[360px] sm:justify-self-center">
-      <ProjectImage image={project.image} alt={project.alt} title={project.title} sizes="(min-width: 640px) 360px, 100vw" />
+  <!-- Visuel + objectif, rôle, livrables -->
+  <section class="border-y-[1.5px] border-ink bg-chalk">
+    <div class:list={[container, "grid gap-10 py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-14 md:py-20"]}>
+      <ProjectImage image={project.image} alt={project.alt} title={project.title} sizes="(min-width: 768px) 50vw, 100vw" class="md:max-w-md" />
+      <dl class="space-y-8">
+        <div>
+          <dt class="text-xl font-bold">Objectif</dt>
+          <dd class="mt-2 text-lg leading-relaxed">{project.objective}</dd>
+        </div>
+        <div>
+          <dt class="text-xl font-bold">Mon rôle</dt>
+          <dd class="mt-2 text-lg leading-relaxed">{project.role}</dd>
+        </div>
+        <div>
+          <dt class="text-xl font-bold">Livrables</dt>
+          <dd class="mt-3">
+            <ul class="flex flex-wrap gap-2">
+              {project.deliverables.map((item) => <li class="border-[1.5px] border-ink bg-white px-3 py-1 font-semibold">{item}</li>)}
+            </ul>
+          </dd>
+        </div>
+      </dl>
     </div>
-    <aside>
-      <SectionLabel>{project.discipline} / {project.year}</SectionLabel>
-      <h2 class="my-6 font-display text-[clamp(2.25rem,3.6vw,3.5rem)] leading-[1.05] font-medium uppercase">L’objectif</h2>
-      <p class="max-w-[30rem] leading-[1.7]">{project.objective}</p>
-    </aside>
   </section>
 
-  <!-- Contexte, rôle, livrables -->
-  <section
-    class:list={[
-      "grid gap-12 border-t border-ink py-14 md:grid-cols-[minmax(0,1.3fr)_minmax(220px,0.7fr)] md:gap-[clamp(3rem,8vw,9rem)] md:py-[clamp(4rem,8vw,8rem)]",
-      pad,
-    ]}
-  >
-    <div>
-      <SectionLabel>Contexte</SectionLabel>
-      <p class:list={["mt-8 max-w-[55rem]", bodyText]}>{project.context}</p>
-      {
-        project.gallery?.map((visual) => (
-          <figure class="mt-6">
-            <ProjectImage
-              image={visual.image}
-              alt={visual.alt}
-              title={`${project.title} — ${visual.title}`}
-              class="border border-ink/20 bg-paper"
-              sizes="(min-width: 768px) 60vw, 100vw"
-            />
-          </figure>
-        ))
-      }
+  <!-- Contexte -->
+  <section class:list={[container, "py-16 md:py-24"]}>
+    <div class="max-w-3xl">
+      <h2 class={h2}>Le contexte</h2>
+      <p class="mt-5 text-lg leading-relaxed">{project.context}</p>
     </div>
-    <aside>
-      <SectionLabel>Mon rôle</SectionLabel>
-      <p class="mt-4 mb-12 text-[0.85rem] leading-[1.55]">{project.role}</p>
-      <SectionLabel>Livrables</SectionLabel>
-      <ul class="mt-4 border-t border-ink/20">
-        {project.deliverables.map((deliverable) => <li class="border-b border-ink/20 py-3 text-[0.75rem]">{deliverable}</li>)}
-      </ul>
-    </aside>
+    {
+      project.gallery?.length > 0 && (
+        <div class="mt-10 grid gap-8">
+          {project.gallery.map((visual) => (
+            <ProjectImage image={visual.image} alt={visual.alt} title={`${project.title} : ${visual.title}`} sizes="(min-width: 1280px) 1200px, 100vw" />
+          ))}
+        </div>
+      )
+    }
   </section>
 
   <!-- Public et message -->
-  <section class:list={["grid gap-6 py-14 md:grid-cols-2 md:py-[clamp(4rem,8vw,8rem)]", pad]}>
-    {
-      [
-        { label: "Le public", text: project.audience },
-        { label: "Le message", text: project.message, extra: project.approach },
-      ].map((block, index) => (
-        <article
-          class:list={[
-            "relative min-h-[320px] border border-ink/20 p-6 md:min-h-[360px] md:p-[clamp(1.5rem,4vw,4rem)]",
-            index === 1 && "bg-sand",
-          ]}
-        >
-          <span class="absolute top-6 right-6 font-mono text-[0.65rem] text-orange">0{index + 1}</span>
-          <SectionLabel>{block.label}</SectionLabel>
-          <h2 class="mt-16 max-w-[35rem] text-[clamp(1.1rem,1.7vw,1.4rem)] leading-[1.7] font-normal">{block.text}</h2>
-          {block.extra && <p class:list={["mt-6 border-t border-ink/20 pt-4", smallText]}>{block.extra}</p>}
-        </article>
-      ))
-    }
+  <section class:list={[container, "grid gap-6 pb-14 md:grid-cols-2 md:pb-20"]}>
+    <div class="border-[1.5px] border-ink p-6 md:p-8">
+      <h2 class={h2}>Le public</h2>
+      <p class="mt-5 text-lg leading-relaxed">{project.audience}</p>
+    </div>
+    <div class="border-[1.5px] border-ink bg-ink p-6 text-white md:p-8">
+      <h2 class={h2}>Le message</h2>
+      <p class="mt-5 text-lg leading-relaxed">{project.message}</p>
+      <p class="mt-5 border-t border-white/25 pt-5 leading-relaxed text-white/75">{project.approach}</p>
+    </div>
   </section>
 
-  <!-- Choix de communication -->
-  <section class:list={["py-8 md:py-[clamp(2rem,5vw,5rem)]", pad]} aria-labelledby="choices-heading">
-    <SectionLabel>Démarche de communication</SectionLabel>
-    <h2 id="choices-heading" class:list={["mt-6 mb-8", subTitle]}>Les choix derrière le projet</h2>
-    {
-      project.choices.map((choice, index) => (
-        <article class="grid grid-cols-[2rem_minmax(0,1fr)] gap-x-4 gap-y-3 border-t border-ink/20 py-7 md:grid-cols-[2rem_minmax(0,0.7fr)_minmax(0,1fr)] md:gap-8">
-          <span class="font-mono text-[0.7rem] text-orange">0{index + 1}</span>
-          <h3 class="font-display text-[1.8rem] leading-[1.2] font-medium">{choice.title}</h3>
-          <p class:list={["col-start-2 md:col-start-auto", smallText]}>{choice.text}</p>
-        </article>
-      ))
-    }
+  <!-- Choix -->
+  <section class="bg-chalk py-16 md:py-24" aria-labelledby="choices-title">
+    <div class={container}>
+      <h2 id="choices-title" class={h2}>Mes choix de communication</h2>
+      <div class="mt-10 grid gap-8 md:grid-cols-3">
+        {
+          project.choices.map((choice) => (
+            <div class="border-t-4 border-orange pt-5">
+              <h3 class="text-xl font-bold">{choice.title}</h3>
+              <p class="mt-3 leading-relaxed">{choice.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
   </section>
 
   <!-- Résultat -->
-  <section class:list={["py-20 md:py-[clamp(5rem,10vw,10rem)]", pad]}>
-    <SectionLabel>Résultat</SectionLabel>
-    <p class:list={["mt-8 max-w-[62rem] md:ml-auto", bodyText]}>{project.result}</p>
-    <div class="mt-8 grid gap-4 border-t border-ink/20 pt-8 md:grid-cols-[minmax(0,0.4fr)_minmax(0,1fr)] md:gap-8">
-      <SectionLabel>Ce que ce projet illustre</SectionLabel>
-      <p class={smallText}>{project.perspective}</p>
+  <section class:list={[container, "grid gap-10 py-16 md:grid-cols-2 md:gap-14 md:py-24"]}>
+    <div>
+      <h2 class={h2}>Le résultat</h2>
+      <p class="mt-5 text-lg leading-relaxed">{project.result}</p>
+    </div>
+    <div>
+      <h2 class={h2}>Ce que ce projet montre</h2>
+      <p class="mt-5 text-lg leading-relaxed">{project.perspective}</p>
     </div>
   </section>
 
   <!-- Projet suivant -->
-  <a
-    href={`/projets/${nextProject.slug}`}
-    class:list={[
-      "group relative block border-y border-ink bg-orange py-12 pr-20 md:py-[clamp(3rem,6vw,6rem)] md:pr-[clamp(5rem,10vw,10rem)] xl:pr-[clamp(5rem,10vw,10rem)]",
-      pad,
-    ]}
-  >
-    <span class="font-mono text-[0.55rem] uppercase">Projet suivant</span>
-    <h2
-      class="mt-4 font-display text-[clamp(2.5rem,11vw,5.625rem)] leading-[0.9] font-medium uppercase md:text-[clamp(3.5rem,6vw,5.625rem)]"
-    >
-      {nextProject.title}
-    </h2>
-    <strong
-      class="absolute right-[clamp(1rem,4vw,4rem)] bottom-8 text-[clamp(2.5rem,5vw,5rem)] font-normal transition-transform duration-200 group-hover:rotate-45"
-      aria-hidden="true">↗</strong
-    >
+  <a href={`/projets/${nextProject.slug}`} class="group block bg-orange text-white">
+    <div class:list={[container, "py-12 md:py-16"]}>
+      <span class="text-lg font-semibold">Projet suivant</span>
+      <span class="mt-2 block font-varsity text-[clamp(2rem,8vw,4.5rem)] leading-none uppercase underline decoration-transparent decoration-4 underline-offset-8 transition-colors group-hover:decoration-white">
+        {nextProject.title}
+      </span>
+    </div>
   </a>
 </Layout>

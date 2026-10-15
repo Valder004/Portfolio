@@ -1,27 +1,9 @@
 ---
-// Grand titre en haut des pages intérieures (Projets, À propos, Contact).
-import SectionLabel from "./SectionLabel.astro";
-
-const { label, title, accent, note, compact = false } = Astro.props;
+// En-tête des pages intérieures : grand titre « maillot » + courte introduction.
+const { title, intro } = Astro.props;
 ---
 
-<header
-  class:list={[
-    "grid gap-y-8 border-b border-ink",
-    compact ? "pb-8" : "pb-12 lg:grid-cols-[minmax(0,1fr)_minmax(220px,0.4fr)] lg:items-end lg:gap-x-12",
-  ]}
->
-  <SectionLabel class="lg:col-span-2">{label}</SectionLabel>
-  <h1
-    class:list={[
-      "flex flex-col font-display leading-[0.98] font-medium tracking-[-0.055em] uppercase",
-      compact
-        ? "mt-6 text-[clamp(2.75rem,12vw,4.5rem)] lg:text-[clamp(3rem,5vw,4.5rem)]"
-        : "mt-12 text-[clamp(3rem,14vw,5.625rem)] md:text-[clamp(4.2rem,9vw,5.625rem)]",
-    ]}
-  >
-    {title}
-    <i class="mt-[0.1em] self-start text-orange not-italic">{accent}</i>
-  </h1>
-  {note && <p class="max-w-[35rem] text-base leading-[1.65]">{note}</p>}
+<header class="max-w-4xl">
+  <h1 class="font-varsity text-[clamp(2.75rem,10vw,5.5rem)] leading-[0.95] uppercase">{title}</h1>
+  {intro && <p class="mt-6 max-w-2xl text-lg leading-relaxed text-slate md:text-xl">{intro}</p>}
 </header>

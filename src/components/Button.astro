@@ -1,0 +1,23 @@
+---
+// Bouton-lien. variant : "solid" (encre), "outline" (contour), "orange", "light" (sur fond sombre/orange)
+const { href, variant = "solid", class: className = "", ...rest } = Astro.props;
+
+const variants = {
+  solid: "border-ink bg-ink text-white hover:border-orange hover:bg-orange",
+  outline: "border-ink bg-transparent text-ink hover:bg-ink hover:text-white",
+  orange: "border-orange bg-orange text-white hover:border-orange-dark hover:bg-orange-dark",
+  light: "border-white bg-white text-ink hover:border-ink hover:bg-ink hover:text-white",
+};
+---
+
+<a
+  href={href}
+  class:list={[
+    "inline-flex min-h-12 items-center justify-center border-2 px-6 py-3 text-base font-semibold transition-colors",
+    variants[variant],
+    className,
+  ]}
+  {...rest}
+>
+  <slot />
+</a>

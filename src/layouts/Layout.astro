@@ -1,19 +1,19 @@
 ---
 // Gabarit commun à toutes les pages : <head>, en-tête, menu, pied de page.
-import "@fontsource/barlow-condensed/400.css";
-import "@fontsource/barlow-condensed/500.css";
-import "@fontsource/inter/400.css";
-import "@fontsource/jetbrains-mono/400.css";
 import "../styles/global.css";
 import { site, navigation } from "../data/site.js";
 import Logo from "../components/Logo.astro";
+import Stripes from "../components/Stripes.astro";
 
 const { title, description = site.description } = Astro.props;
-const pageTitle = title ? `${title} — ${site.name}` : site.title;
+const pageTitle = title ? `${title} | ${site.name}` : site.title;
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
 
 const isActive = (href) =>
   href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+
+// Le lien Contact est affiché comme un bouton à part
+const links = navigation.filter((item) => item.href !== "/contact");
 ---
 
 <!doctype html>
@@ -26,150 +26,124 @@ const isActive = (href) =>
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#f1efe6" />
+    <meta name="theme-color" content="#ffffff" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Graduate&display=swap"
+    />
   </head>
 
   <body class="font-sans">
-    <div class="min-h-dvh overflow-x-clip">
+    <div class="flex min-h-dvh flex-col overflow-x-clip">
       <!-- En-tête -->
-      <header
-        class="sticky top-0 z-30 flex min-h-18 items-center justify-between gap-4 border-b border-ink/20 bg-paper px-4 md:min-h-22 md:px-8 xl:px-15"
-      >
-        <div class="flex items-center gap-4">
-          <a href="/" class="transition-transform duration-200 hover:-rotate-3" aria-label={`Accueil ${site.name}`}>
-            <Logo variant="light" class="w-10 md:w-12" />
+      <header class="sticky top-0 z-30 border-b-[1.5px] border-ink bg-white">
+        <div class="mx-auto flex h-18 max-w-7xl items-center justify-between gap-4 px-5 md:h-20 md:px-8">
+          <a href="/" class="flex items-center gap-3" aria-label={`Accueil, ${site.name}`}>
+            <Logo variant="light" class="w-10 md:w-11" />
+            <span class="text-sm leading-tight font-semibold">{site.tagline}</span>
           </a>
-          <p class="text-[0.8rem] leading-normal text-ink/70">{site.tagline}</p>
-        </div>
 
-        <!-- Bouton du menu (mobile et tablette uniquement) -->
-        <button
-          type="button"
-          class="group relative z-40 grid cursor-pointer grid-cols-[1.3rem_auto] items-center gap-x-2.5 gap-y-1 border border-ink px-3 py-2.5 font-mono text-[0.56rem] uppercase aria-expanded:bg-ink aria-expanded:text-paper md:hidden"
-          aria-expanded="false"
-          aria-controls="main-navigation"
-          aria-label="Ouvrir le menu"
-          data-menu-toggle
-        >
-          <span
-            class="col-start-1 row-start-1 h-px w-[1.3rem] bg-current transition-transform duration-200 group-aria-expanded:translate-y-[2px] group-aria-expanded:rotate-45"
-          ></span>
-          <span
-            class="col-start-1 row-start-2 h-px w-[1.3rem] bg-current transition-transform duration-200 group-aria-expanded:-translate-y-[2px] group-aria-expanded:-rotate-45"
-          ></span>
-          <span class="col-start-2 row-span-2 row-start-1" data-menu-label>Menu</span>
-        </button>
-
-        <!-- Navigation : panneau plein écran sur mobile, barre horizontale à partir de md -->
-        <nav
-          id="main-navigation"
-          aria-label="Navigation principale"
-          data-menu
-          class="invisible fixed inset-x-0 top-18 bottom-0 z-30 flex -translate-y-4 flex-col overflow-y-auto bg-paper px-4 pt-6 pb-12 opacity-0 transition duration-200 data-open:visible data-open:translate-y-0 data-open:opacity-100 sm:px-8 md:visible md:static md:translate-y-0 md:flex-row md:items-center md:gap-1.5 md:overflow-visible md:bg-transparent md:p-0 md:opacity-100 md:transition-none"
-        >
-          <p class="mb-8 font-mono text-[0.6rem] uppercase md:hidden">Portfolio / {site.tagline}</p>
-
-          {
-            navigation.map(({ href, label }, index) => {
-              const active = isActive(href);
-              const isContact = index === navigation.length - 1;
-              return (
+          <!-- Navigation ordinateur -->
+          <nav aria-label="Navigation principale" class="hidden items-center gap-1 md:flex">
+            {
+              links.map(({ href, label }) => (
                 <a
                   href={href}
-                  aria-current={active ? "page" : undefined}
+                  aria-current={isActive(href) ? "page" : undefined}
                   class:list={[
-                    // Mobile : grands liens empilés
-                    "grid grid-cols-[2rem_1fr_auto] items-center gap-4 border-b border-ink/35 py-3 font-display text-[clamp(2.75rem,13vw,4.5rem)] leading-[0.9] font-medium tracking-[-0.035em] hover:text-orange",
-                    // À partir de md : barre horizontale
-                    "md:flex md:min-h-11 md:gap-2 md:border-b-2 md:px-4 md:py-3 md:font-sans md:text-[0.7rem] md:leading-normal md:font-normal md:tracking-[0.06em] md:uppercase md:transition-colors",
-                    active && "text-orange md:text-ink",
-                    // Une seule couleur de bordure par cas, pour éviter les conflits de classes
-                    isContact
-                      ? "md:ml-2.5 md:border md:border-ink md:bg-orange md:hover:bg-ink md:hover:text-paper"
-                      : active
-                        ? "md:border-orange md:hover:bg-ink/5"
-                        : "md:border-transparent md:hover:border-orange md:hover:bg-ink/5 md:hover:text-ink",
+                    "border-b-[3px] px-3 py-2 font-semibold transition-colors hover:border-orange",
+                    isActive(href) ? "border-orange" : "border-transparent",
                   ]}
                 >
-                  <span class="self-start pt-1.5 font-mono text-[0.55rem] tracking-normal md:self-auto md:pt-0 md:text-[0.5rem] md:opacity-50">
-                    0{index + 1}
-                  </span>
                   {label}
-                  {active && (
-                    <span class="justify-self-end font-sans text-[2rem] md:hidden" aria-hidden="true">
-                      ↗
-                    </span>
-                  )}
                 </a>
-              );
-            })
-          }
+              ))
+            }
+            <a
+              href="/contact"
+              aria-current={isActive("/contact") ? "page" : undefined}
+              class="ml-3 border-2 border-orange bg-orange px-5 py-2 font-semibold text-white transition-colors hover:border-ink hover:bg-ink"
+            >
+              Contact
+            </a>
+          </nav>
 
-          <p class="mt-auto pt-8 text-[0.8rem] leading-[1.7] md:hidden">
-            Un club, une marque, un événement ?<br /><span class="text-orange">Faisons équipe.</span>
+          <!-- Bouton du menu mobile -->
+          <button
+            type="button"
+            class="flex cursor-pointer items-center gap-2 border-[1.5px] border-ink px-3 py-2 font-semibold aria-expanded:bg-ink aria-expanded:text-white md:hidden"
+            aria-expanded="false"
+            aria-controls="mobile-navigation"
+            data-menu-toggle
+          >
+            <svg class="size-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M2 6h16M2 14h16"></path>
+            </svg>
+            <span data-menu-label>Menu</span>
+          </button>
+        </div>
+
+        <!-- Menu mobile -->
+        <nav
+          id="mobile-navigation"
+          aria-label="Navigation principale"
+          data-menu
+          class="invisible fixed inset-x-0 top-18 bottom-0 z-30 flex flex-col overflow-y-auto bg-white px-5 pt-4 pb-10 opacity-0 transition-opacity duration-150 data-open:visible data-open:opacity-100 md:hidden"
+        >
+          {
+            navigation.map(({ href, label }) => (
+              <a
+                href={href}
+                aria-current={isActive(href) ? "page" : undefined}
+                class:list={[
+                  "border-b-[1.5px] border-ink py-4 font-varsity text-4xl uppercase",
+                  isActive(href) && "text-orange",
+                ]}
+              >
+                {label}
+              </a>
+            ))
+          }
+          <p class="mt-auto pt-10 text-slate">
+            Un club, une marque, un événement ? Écrivez-moi à
+            <a href={`mailto:${site.email}`} class="font-semibold text-ink underline underline-offset-4">{site.email}</a>.
           </p>
         </nav>
       </header>
 
-      <main>
+      <main class="flex-1">
         <slot />
       </main>
 
+      <Stripes />
+
       <!-- Pied de page -->
-      <footer
-        class="grid items-end gap-8 bg-ink px-4 py-14 text-[0.78rem] text-paper/80 md:grid-cols-[minmax(0,1fr)_auto_auto] md:px-8 xl:px-15"
-      >
-        <div class="flex items-center gap-5">
-          <Logo variant="dark" class="w-16 shrink-0 md:w-20" />
-          <div class="space-y-1.5">
-            <p class="font-display text-[1.8rem] font-medium text-paper uppercase">{site.name}</p>
-            <p>Communication sportive · Contenus · Événementiel</p>
+      <footer class="bg-ink text-white">
+        <div class="mx-auto grid max-w-7xl gap-10 px-5 py-14 md:grid-cols-[auto_1fr_auto] md:items-center md:px-8">
+          <Logo variant="dark" class="w-16" />
+          <div>
+            <p class="font-varsity text-2xl uppercase">{site.name}</p>
+            <p class="mt-1 text-white/70">Communication sportive, contenus et événementiel</p>
           </div>
-        </div>
-        <div class="flex flex-wrap gap-3">
-          {
-            [
-              {
-                href: `mailto:${site.email}`,
-                label: `Envoyer un email à ${site.name}`,
-                title: "Email",
-                external: false,
-              },
-              { href: site.socials.linkedin, label: "LinkedIn (nouvel onglet)", title: "LinkedIn", external: true },
-              { href: site.socials.instagram, label: "Instagram (nouvel onglet)", title: "Instagram", external: true },
-            ].map((link) => (
-              <a
-                href={link.href}
-                aria-label={link.label}
-                title={link.title}
-                target={link.external ? "_blank" : undefined}
-                rel={link.external ? "noreferrer" : undefined}
-                class="grid size-11 place-items-center border border-paper/30 text-paper transition-colors hover:border-orange-soft hover:bg-paper/5 hover:text-orange-soft"
-              >
-                {link.title === "Email" && (
-                  <svg class="size-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="3" y="5" width="18" height="14" rx="2" />
-                    <path d="m3 6 9 7 9-7" />
-                  </svg>
-                )}
-                {link.title === "LinkedIn" && (
-                  <svg class="size-[22px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M5.4 7.4a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM3.7 9h3.4v11H3.7V9Zm5.5 0h3.3v1.5h.1A3.6 3.6 0 0 1 15.9 8.7c3.5 0 4.1 2.3 4.1 5.3v6h-3.4v-5.3c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V20H9.2V9Z" />
-                  </svg>
-                )}
-                {link.title === "Instagram" && (
-                  <svg class="size-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
-                    <rect x="3" y="3" width="18" height="18" rx="5" />
-                    <circle cx="12" cy="12" r="4" />
-                    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-                  </svg>
-                )}
+          <ul class="flex flex-wrap gap-x-6 gap-y-3 font-semibold">
+            <li>
+              <a href={site.socials.linkedin} target="_blank" rel="noreferrer" class="underline-offset-4 hover:text-orange hover:underline">
+                LinkedIn
               </a>
-            ))
-          }
+            </li>
+            <li>
+              <a href={site.socials.instagram} target="_blank" rel="noreferrer" class="underline-offset-4 hover:text-orange hover:underline">
+                Instagram
+              </a>
+            </li>
+          </ul>
         </div>
-        <p class="md:justify-self-end">© {new Date().getFullYear()} — France</p>
+        <div class="border-t border-white/15">
+          <p class="mx-auto max-w-7xl px-5 py-5 text-sm text-white/60 md:px-8">© {new Date().getFullYear()} {site.name}</p>
+        </div>
       </footer>
     </div>
 

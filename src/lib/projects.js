@@ -69,3 +69,9 @@ export async function getProjects() {
     return localProjects;
   }
 }
+
+/** Discipline + année pour l'affichage, ex. « Communication, UX/UI, Dev (2026) » */
+export function projectMeta(project) {
+  const discipline = (project.discipline ?? "").split(/\s*·\s*/).filter(Boolean).join(", ");
+  return project.year ? `${discipline} (${project.year})` : discipline;
+}

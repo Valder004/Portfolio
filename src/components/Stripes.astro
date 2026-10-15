@@ -1,0 +1,9 @@
+---
+// Liseré rayé façon bord de manche de maillot (encre / orange), aux couleurs du logo.
+const { class: className = "" } = Astro.props;
+---
+
+<div aria-hidden="true" class:list={["flex flex-col gap-1 bg-white py-1", className]}>
+  <span class="block h-2 bg-ink"></span>
+  <span class="block h-2 bg-orange"></span>
+</div>

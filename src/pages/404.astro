@@ -1,13 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Button from "../components/Button.astro";
 ---
 
 <Layout title="Page introuvable">
-  <section class="flex min-h-[80dvh] flex-col justify-center px-4 md:px-8 xl:px-15">
-    <p class="font-mono text-[0.7rem] uppercase">Erreur 404</p>
-    <h1 class="mt-4 mb-12 font-display text-[clamp(4.5rem,8vw,5.625rem)] leading-[0.8] font-medium text-orange uppercase">
-      Hors-jeu.
-    </h1>
-    <a href="/" class="w-max border-b border-ink pb-1 text-[0.75rem] uppercase hover:text-orange">Revenir à l’accueil ↗</a>
+  <section class="mx-auto flex min-h-[60dvh] max-w-7xl flex-col justify-center px-5 py-16 md:px-8">
+    <p class="text-lg font-semibold">Erreur 404</p>
+    <h1 class="mt-3 font-varsity text-[clamp(2.5rem,11vw,7rem)] leading-none text-orange uppercase">Hors-jeu.</h1>
+    <p class="mt-4 max-w-xl text-lg text-slate">Cette page n'existe pas ou a été déplacée.</p>
+    <Button href="/" class="mt-8 self-start">Revenir à l'accueil</Button>
   </section>
 </Layout>

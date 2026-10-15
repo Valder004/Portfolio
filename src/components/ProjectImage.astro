@@ -5,19 +5,17 @@ import { Image } from "astro:assets";
 const { image, alt, title, class: className = "", sizes = "(min-width: 768px) 50vw, 100vw" } = Astro.props;
 ---
 
-<button
-  type="button"
-  class:list={["group/zoom relative block w-full cursor-zoom-in p-0", className]}
-  aria-label={`Agrandir le visuel de ${title}`}
-  aria-haspopup="dialog"
-  data-lightbox-src={typeof image === "string" ? image : image.src}
-  data-lightbox-alt={alt}
-  data-lightbox-title={title}
->
-  <Image src={image} alt={alt} inferSize={typeof image === "string"} widths={[480, 800, 1200, 1600]} sizes={sizes} class="block h-auto w-full" />
-  <small
-    class="absolute bottom-2.5 left-1/2 flex -translate-x-1/2 items-center gap-3 bg-ink px-3.5 py-2.5 text-[0.7rem] whitespace-nowrap text-paper transition-colors group-hover/zoom:bg-orange group-hover/zoom:text-ink"
+<figure class:list={["min-w-0", className]}>
+  <button
+    type="button"
+    class="block w-full cursor-zoom-in border-[1.5px] border-ink bg-chalk p-0 transition-colors hover:border-orange"
+    aria-label={`Agrandir l'image : ${title}`}
+    aria-haspopup="dialog"
+    data-lightbox-src={typeof image === "string" ? image : image.src}
+    data-lightbox-alt={alt}
+    data-lightbox-title={title}
   >
-    Agrandir le visuel <b class="text-base font-normal" aria-hidden="true">⤢</b>
-  </small>
-</button>
+    <Image src={image} alt={alt} inferSize={typeof image === "string"} widths={[480, 800, 1200, 1600]} sizes={sizes} class="block h-auto w-full" />
+  </button>
+  <figcaption class="mt-2 text-sm text-slate">Cliquez sur l'image pour l'agrandir.</figcaption>
+</figure>

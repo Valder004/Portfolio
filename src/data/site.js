@@ -9,8 +9,8 @@ export const site = {
   phone: { display: "07 71 63 64 90", href: "tel:+33771636490" },
   // TODO : remplace par tes vrais profils
   socials: {
-    linkedin: "https://www.linkedin.com",
-    instagram: "https://www.instagram.com",
+    linkedin: "https://www.linkedin.com/in/valentin-deroo-494245380",
+    instagram: "https://www.instagram.com/deroo_valentin/",
   },
 };
 

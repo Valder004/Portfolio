@@ -1,42 +1,29 @@
 /*
-  Configuration Tailwind du portfolio.
-  Toute la mise en page est écrite en classes Tailwind directement dans les
-  fichiers .astro. Ce fichier ne contient que :
-  - le thème (couleurs, polices, animation) → disponibles en classes
-    ex. bg-paper, text-orange, font-display, animate-ticker
-  - quelques styles de base globaux (fond, sélection, focus clavier).
+  Thème du portfolio — esprit « club / varsity », dans la continuité du logo écusson.
+  La mise en page est écrite en classes Tailwind dans les fichiers .astro ;
+  ce fichier ne déclare que les couleurs, les polices et quelques styles de base.
+  Polices chargées dans Layout.astro (Google Fonts) : Graduate (titres) et Archivo (texte).
 */
 @import "tailwindcss";
 
 @theme {
-  /* Couleurs */
-  --color-paper: #f1efe6;
-  --color-paper-light: #f8f6ef;
-  --color-sand: #eadfd4;
-  --color-stone: #e8e3d9;
+  /* Couleurs (orange et encre = celles du logo) */
+  --color-white: #ffffff;
+  --color-chalk: #f1f1ee;
   --color-ink: #161616;
   --color-orange: #cc4814;
-  --color-orange-soft: #f89a70;
-  --color-live: #57b542;
+  --color-orange-dark: #a83a0f;
+  --color-slate: #5e5e5e;
 
-  /* Polices (chargées dans Layout.astro) */
-  --font-sans: "Inter", Arial, sans-serif;
-  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-
-  /* Bandeau défilant de l'accueil */
-  --animate-ticker: ticker 24s linear infinite;
-  @keyframes ticker {
-    to {
-      transform: translateX(-50%);
-    }
-  }
+  /* Polices */
+  --font-sans: "Archivo", Arial, sans-serif;
+  --font-varsity: "Graduate", "Rockwell", Georgia, serif;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    background-color: var(--color-paper);
+    background-color: var(--color-white);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -47,19 +34,18 @@
 
   body {
     min-width: 320px;
-    background-color: var(--color-paper);
+    background-color: var(--color-white);
     color: var(--color-ink);
-    font-synthesis: none;
     -webkit-font-smoothing: antialiased;
   }
 
   ::selection {
-    color: var(--color-orange);
-    background-color: var(--color-ink);
+    color: var(--color-white);
+    background-color: var(--color-orange);
   }
 
   :where(a, button, input, textarea):focus-visible {
-    outline: 2px solid var(--color-orange);
-    outline-offset: 5px;
+    outline: 3px solid var(--color-orange);
+    outline-offset: 3px;
   }
 }
