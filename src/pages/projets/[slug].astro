@@ -55,7 +55,7 @@ const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppe
             slides={project.slides}
             label={`Visuels du projet ${project.title}`}
             sizes="(min-width: 768px) 28rem, 100vw"
-            class="aspect-[4/5] w-full border-[1.5px] border-ink bg-ink md:max-w-md"
+            class="relative aspect-[4/5] w-full border-[1.5px] border-ink bg-ink md:max-w-md"
           />
         ) : (
           <ProjectImage image={project.image} alt={project.alt} title={project.title} sizes="(min-width: 768px) 50vw, 100vw" class="md:max-w-md" />

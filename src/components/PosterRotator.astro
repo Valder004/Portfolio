@@ -1,5 +1,6 @@
 ---
 // Diaporama automatique : les visuels se succèdent en fondu (voir le script ci-dessous).
+// Le positionnement (relative ou absolute) est donné par la classe passée au composant.
 // Sans animation si le visiteur a demandé à réduire les mouvements.
 import { Image } from "astro:assets";
 
@@ -13,7 +14,7 @@ const {
 } = Astro.props;
 ---
 
-<div data-rotator data-interval={interval} class:list={["relative overflow-hidden", className]} role="img" aria-label={label}>
+<div data-rotator data-interval={interval} class:list={["overflow-hidden", className]} role="img" aria-label={label}>
   {
     slides.map((slide, i) => (
       <Image
