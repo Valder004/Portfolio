@@ -2,7 +2,7 @@
 // Image cliquable qui s'ouvre en grand (voir src/scripts/lightbox.js).
 import { Image } from "astro:assets";
 
-const { image, alt, title, class: className = "", sizes = "(min-width: 768px) 50vw, 100vw" } = Astro.props;
+const { image, alt, title, class: className = "", sizes = "(min-width: 768px) 50vw, 100vw", hint = true } = Astro.props;
 ---
 
 <figure class:list={["min-w-0", className]}>
@@ -17,5 +17,5 @@ const { image, alt, title, class: className = "", sizes = "(min-width: 768px) 50
   >
     <Image src={image} alt={alt} inferSize={typeof image === "string"} widths={[480, 800, 1200, 1600]} sizes={sizes} class="block h-auto w-full" />
   </button>
-  <figcaption class="mt-2 text-sm text-slate">Cliquez sur l'image pour l'agrandir.</figcaption>
+  {hint && <figcaption class="mt-2 text-sm text-slate">Cliquez sur l'image pour l'agrandir.</figcaption>}
 </figure>

@@ -40,12 +40,15 @@ const PROJECT = {
 
 migrate(
   (app) => {
-    try {
-      app.findFirstRecordByData("projects", "slug", PROJECT.slug);
-      console.log("[psg-barca] projet déjà présent, rien à faire");
-      return;
-    } catch {
-      // pas encore créé
+    // Déjà présent, ou déjà transformé en page « Affiches sportives » : rien à faire
+    for (const slug of [PROJECT.slug, "affiches-sportives"]) {
+      try {
+        app.findFirstRecordByData("projects", "slug", slug);
+        console.log("[psg-barca] projet déjà présent, rien à faire");
+        return;
+      } catch {
+        // pas encore créé
+      }
     }
 
     let image = null;

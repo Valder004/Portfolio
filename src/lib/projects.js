@@ -19,6 +19,15 @@ function fileUrl(record, filename) {
 /** Convertit un enregistrement PocketBase au format utilisé par les composants */
 export function toProject(record, index) {
   const galleryInfo = Array.isArray(record.gallery_info) ? record.gallery_info : [];
+  const gallery = (record.gallery ?? []).map((filename, i) => ({
+    image: fileUrl(record, filename),
+    alt: galleryInfo[i]?.alt ?? "",
+    title: galleryInfo[i]?.title ?? `Visuel ${i + 1}`,
+    text: galleryInfo[i]?.text ?? "",
+  }));
+  // Galerie en grille (ex. affiches) : la card fait défiler les visuels automatiquement
+  const galleryGrid = Boolean(record.gallery_grid) && gallery.length > 0;
+
   return {
     slug: record.slug,
     number: String(index + 1).padStart(2, "0"),
@@ -40,11 +49,9 @@ export function toProject(record, index) {
     perspective: record.perspective,
     website: record.website || undefined,
     websiteUnavailable: Boolean(record.website_unavailable),
-    gallery: (record.gallery ?? []).map((filename, i) => ({
-      image: fileUrl(record, filename),
-      alt: galleryInfo[i]?.alt ?? "",
-      title: galleryInfo[i]?.title ?? `Visuel ${i + 1}`,
-    })),
+    gallery,
+    galleryGrid,
+    slides: galleryGrid ? gallery : undefined,
   };
 }
 

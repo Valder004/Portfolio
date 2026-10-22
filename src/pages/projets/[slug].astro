@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import ProjectImage from "../../components/ProjectImage.astro";
+import PosterRotator from "../../components/PosterRotator.astro";
 import Button from "../../components/Button.astro";
 import { getProjects, projectMeta, cacheProjectsPage } from "../../lib/projects.js";
 
@@ -48,7 +49,18 @@ const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppe
   <!-- Visuel + objectif, rôle, livrables -->
   <section class="border-y-[1.5px] border-ink bg-chalk">
     <div class:list={[container, "grid gap-10 py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-14 md:py-20"]}>
-      <ProjectImage image={project.image} alt={project.alt} title={project.title} sizes="(min-width: 768px) 50vw, 100vw" class="md:max-w-md" />
+      {
+        project.slides ? (
+          <PosterRotator
+            slides={project.slides}
+            label={`Visuels du projet ${project.title}`}
+            sizes="(min-width: 768px) 28rem, 100vw"
+            class="aspect-[4/5] w-full border-[1.5px] border-ink bg-ink md:max-w-md"
+          />
+        ) : (
+          <ProjectImage image={project.image} alt={project.alt} title={project.title} sizes="(min-width: 768px) 50vw, 100vw" class="md:max-w-md" />
+        )
+      }
       <dl class="space-y-8">
         <div>
           <dt class="text-xl font-bold">Objectif</dt>
@@ -77,7 +89,23 @@ const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppe
       <p class="mt-5 text-lg leading-relaxed">{project.context}</p>
     </div>
     {
-      project.gallery?.length > 0 && (
+      project.galleryGrid && (
+        <div class="mt-10">
+          <p class="text-sm text-slate">Cliquez sur une affiche pour l'agrandir.</p>
+          <div class="mt-4 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            {project.gallery.map((visual) => (
+              <div>
+                <ProjectImage image={visual.image} alt={visual.alt} title={`${project.title} : ${visual.title}`} sizes="(min-width: 1024px) 30vw, (min-width: 640px) 50vw, 100vw" hint={false} />
+                <h3 class="mt-4 text-xl font-bold">{visual.title}</h3>
+                {visual.text && <p class="mt-2 leading-relaxed text-slate">{visual.text}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    }
+    {
+      !project.galleryGrid && project.gallery?.length > 0 && (
         <div class="mt-10 grid gap-8">
           {project.gallery.map((visual) => (
             <ProjectImage image={visual.image} alt={visual.alt} title={`${project.title} : ${visual.title}`} sizes="(min-width: 1280px) 1200px, 100vw" />

@@ -1,0 +1,61 @@
+---
+// Diaporama automatique : les visuels se succèdent en fondu (voir le script ci-dessous).
+// Sans animation si le visiteur a demandé à réduire les mouvements.
+import { Image } from "astro:assets";
+
+const {
+  slides = [],
+  class: className = "",
+  imgClass = "object-cover",
+  sizes = "(min-width: 768px) 50vw, 100vw",
+  interval = 3500,
+  label = "Diaporama",
+} = Astro.props;
+---
+
+<div data-rotator data-interval={interval} class:list={["relative overflow-hidden", className]} role="img" aria-label={label}>
+  {
+    slides.map((slide, i) => (
+      <Image
+        src={slide.image}
+        alt={i === 0 ? slide.alt : ""}
+        inferSize={typeof slide.image === "string"}
+        widths={[480, 800, 1200]}
+        sizes={sizes}
+        loading={i === 0 ? "eager" : "lazy"}
+        data-slide
+        class:list={["absolute inset-0 size-full transition-opacity duration-700 ease-out", i === 0 ? "opacity-100" : "opacity-0", imgClass]}
+      />
+    ))
+  }
+  {
+    slides.length > 1 && (
+      <div class="absolute inset-x-0 bottom-3 flex justify-center gap-1.5" aria-hidden="true">
+        {slides.map((_, i) => (
+          <span data-dot class:list={["h-1.5 w-5 transition-colors duration-700", i === 0 ? "bg-white" : "bg-white/40"]} />
+        ))}
+      </div>
+    )
+  }
+</div>
+
+<script>
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.querySelectorAll<HTMLElement>("[data-rotator]").forEach((rotator) => {
+    const slides = rotator.querySelectorAll("[data-slide]");
+    const dots = rotator.querySelectorAll("[data-dot]");
+    if (slides.length < 2 || reduceMotion) return;
+
+    let current = 0;
+    const show = (next: number) => {
+      slides[current].classList.replace("opacity-100", "opacity-0");
+      dots[current]?.classList.replace("bg-white", "bg-white/40");
+      current = next;
+      slides[current].classList.replace("opacity-0", "opacity-100");
+      dots[current]?.classList.replace("bg-white/40", "bg-white");
+    };
+
+    setInterval(() => show((current + 1) % slides.length), Number(rotator.dataset.interval) || 3500);
+  });
+</script>
