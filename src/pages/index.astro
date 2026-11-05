@@ -6,6 +6,8 @@ import ContactBanner from "../components/ContactBanner.astro";
 import Portrait from "../components/Portrait.astro";
 import Button from "../components/Button.astro";
 import Stripes from "../components/Stripes.astro";
+import Logo from "../components/Logo.astro";
+import Token from "../components/Token.astro";
 import { expertises } from "../data/projects.js";
 import { getProjects, cacheProjectsPage } from "../lib/projects.js";
 import heroPhoto from "../assets/match-nuit.jpg";
@@ -24,109 +26,160 @@ const approach = [
 
 // Conteneur commun : largeur max + marges latérales
 const container = "mx-auto max-w-7xl px-5 md:px-8";
+const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppercase jersey";
+const stair = ["md:mt-0", "md:mt-14", "md:mt-28"];
+const stairSkills = ["lg:mt-0", "lg:mt-8", "lg:mt-16", "lg:mt-24"];
 ---
 
 <Layout>
-  <!-- Ouverture -->
-  <section class:list={[container, "grid items-center gap-10 py-12 md:py-16 lg:grid-cols-[1.2fr_0.8fr] lg:gap-14 lg:py-20"]}>
-    <div>
-      <p class="text-lg font-semibold">Valentin Deroo, étudiant en MMI</p>
-      <h1 class="mt-4 font-varsity text-[clamp(2.25rem,8.5vw,3.75rem)] leading-[0.95] uppercase lg:text-[clamp(2.5rem,4.6vw,4.5rem)]">
-        Créer le jeu, marquer les esprits.
-      </h1>
-      <p class="mt-6 max-w-xl text-lg leading-relaxed text-slate md:text-xl">
-        Je veux faire vivre le sport à travers des messages, des contenus et des campagnes
-        qui rapprochent les clubs, les marques et les événements de leurs publics.
-      </p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <Button href="/projets">Voir mes projets</Button>
-        <Button href="/contact" variant="outline">Me contacter</Button>
+  <!-- Ouverture : un tableau tactique. On y trace une action, le ballon la suit jusqu'au but. -->
+  <section class="relative flex flex-col overflow-hidden lg:min-h-[calc(100svh-5rem)] lg:justify-center">
+    <div class:list={[container, "pointer-events-none relative z-[3] w-full py-12 md:py-16 lg:py-20"]}>
+      <div class="lg:w-[50%]">
+        <p class="text-lg font-semibold">Valentin Deroo, étudiant en MMI</p>
+        <h1 class="jersey mt-4 font-varsity text-[clamp(2.25rem,8.5vw,3.75rem)] leading-[1.02] uppercase lg:text-[clamp(2.5rem,4.6vw,4.5rem)]">
+          Créer le jeu, <span data-marked class="marked">marquer les esprits.</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-slate md:text-xl">
+          Je veux faire vivre le sport à travers des messages, des contenus et des campagnes
+          qui rapprochent les clubs, les marques et les événements de leurs publics.
+        </p>
+        <div class="pointer-events-auto mt-8 flex w-fit flex-wrap gap-3">
+          <Button href="/projets">Voir mes projets</Button>
+          <Button href="/contact" variant="outline">Me contacter</Button>
+        </div>
       </div>
     </div>
 
-    <div class="relative">
-      <!-- Ombre portée orange décalée, comme le lettrage du logo -->
-      <div aria-hidden="true" class="absolute inset-0 translate-x-3 translate-y-3 bg-orange"></div>
-      <Image
-        src={heroPhoto}
-        alt="Match de football amateur de nuit sous la pluie, éclairé par un projecteur"
-        widths={[640, 1000, 1400, 1800]}
-        sizes="(min-width: 1024px) 45vw, 100vw"
-        loading="eager"
-        fetchpriority="high"
-        class="relative block aspect-[4/3] w-full border-[1.5px] border-ink object-cover object-[50%_70%]"
-      />
+    <!-- Le terrain -->
+    <div data-board class="relative z-[2] h-[44svh] min-h-72 w-full overflow-hidden border-t-[1.5px] border-ink/15 lg:absolute lg:inset-0 lg:h-auto lg:border-t-0">
+      <div aria-hidden="true" class="pitch absolute inset-y-4 right-0 left-[14%] lg:inset-y-8 lg:left-[60%]">
+        <span class="absolute top-1/2 left-0 aspect-square h-[46%] -translate-x-1/2 lg:h-[34%] -translate-y-1/2 rounded-full border-2 border-ink/20"></span>
+        <span class="absolute top-1/2 right-0 h-[70%] w-[38%] -translate-y-1/2 border-y-2 border-l-2 border-ink/20"></span>
+        <span class="absolute top-1/2 right-0 h-[38%] w-[16%] -translate-y-1/2 border-y-2 border-l-2 border-ink/20"></span>
+        <span class="absolute top-1/2 right-[27%] size-2 -translate-y-1/2 rounded-full bg-ink/25"></span>
+        <span data-board-spot data-play class="absolute top-1/2 left-0 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-ink/30"></span>
+        <span data-board-goal class="board-goal absolute top-1/2 right-0 h-[28%] w-9 -translate-y-1/2 lg:w-12"></span>
+        <span class="board-hint absolute top-3 left-5 font-hand text-2xl text-orange-dark lg:top-[10%] lg:left-[14%] lg:text-3xl">
+          Dessine ton action
+          <svg viewBox="0 0 60 34" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="ml-1 inline-block w-11 align-middle">
+            <path d="M3 8c14 18 30 20 52 12M45 12l10 8-11 7"></path>
+          </svg>
+        </span>
+      </div>
+      <canvas aria-hidden="true" class="board-canvas absolute inset-0 size-full touch-none"></canvas>
+      <!-- Le score, qui augmente à chaque but marqué -->
+      <div aria-hidden="true" class="pointer-events-none absolute top-3 right-3 flex items-center gap-2 border-[1.5px] border-ink bg-white py-1 pr-1 pl-2 lg:top-6 lg:right-8">
+        <Logo variant="light" class="w-6" />
+        <span data-score class="score-digit block w-8 bg-ink py-0.5 text-center font-varsity text-xl text-white">0</span>
+      </div>
     </div>
+
+    <i data-play data-play-x="36" aria-hidden="true" class="absolute bottom-5 left-0"></i>
   </section>
 
   <Stripes />
 
-  <!-- Méthode -->
-  <section class:list={[container, "py-16 md:py-24"]} aria-labelledby="approach-title">
-    <h2 id="approach-title" class="font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppercase">Ma façon de travailler</h2>
-    <div class="mt-10 grid gap-8 md:grid-cols-3 md:gap-10">
-      {
-        approach.map((step) => (
-          <div class="border-t-4 border-ink pt-5">
-            <h3 class="text-2xl font-bold">{step.title}</h3>
-            <p class="mt-2 text-lg leading-relaxed text-slate">{step.text}</p>
-          </div>
-        ))
-      }
+  <!-- Méthode : trois passes -->
+  <section class="relative" aria-labelledby="approach-title">
+    <i data-play data-play-x="l" aria-hidden="true" class="absolute top-28 left-0"></i>
+    <div class:list={[container, "relative z-[2] py-16 md:py-24"]}>
+      <h2 id="approach-title" class={h2}>Ma façon de travailler</h2>
+      <div class="mt-10 grid gap-10 md:grid-cols-3 md:gap-10">
+        {
+          approach.map((step, index) => (
+            <div class:list={["play-step relative pl-14 md:pl-0", stair[index]]}>
+              <Token class="absolute top-0.5 left-0 md:relative md:top-0 md:mb-5" />
+              {index === approach.length - 1 && <i data-play data-play-x="r" aria-hidden="true" class="absolute top-2 left-0 hidden md:block"></i>}
+              <h3 class="text-2xl font-bold transition-colors duration-300">{step.title}</h3>
+              <p class="mt-2 text-lg leading-relaxed text-slate">{step.text}</p>
+            </div>
+          ))
+        }
+      </div>
     </div>
+    <i data-play data-play-x="l" aria-hidden="true" class="absolute bottom-14 left-0 md:hidden"></i>
+    <i data-play data-play-x="r" aria-hidden="true" class="absolute bottom-6 left-0"></i>
+  </section>
+
+  <!-- Le match de nuit : les projecteurs s'allument quand le ballon arrive -->
+  <section data-play-react class="lights relative overflow-hidden bg-ink">
+    <Image
+      src={heroPhoto}
+      alt="Match de football amateur de nuit sous la pluie, éclairé par un projecteur"
+      widths={[640, 1000, 1400, 1800, 2576]}
+      sizes="100vw"
+      class="block h-[46svh] w-full object-cover object-[50%_72%] md:h-[66svh]"
+    />
+    <i data-play data-play-x="78" aria-hidden="true" class="absolute top-[18%] left-0"></i>
+    <i data-play data-play-x="22" aria-hidden="true" class="absolute top-[78%] left-0"></i>
   </section>
 
   <!-- Projets -->
-  <section class="bg-chalk py-16 md:py-24" aria-labelledby="projects-title">
-    <div class={container}>
-      <div class="flex flex-wrap items-end justify-between gap-4">
-        <h2 id="projects-title" class="font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppercase">Projets récents</h2>
+  <section class="relative bg-chalk" aria-labelledby="projects-title">
+    <i data-play data-play-x="l" aria-hidden="true" class="absolute top-16 left-0"></i>
+    <div class:list={[container, "relative z-[2] py-16 md:py-24"]}>
+      <div class="relative flex flex-wrap items-end justify-between gap-4">
+        <i data-play data-play-x="l" aria-hidden="true" class="absolute -bottom-6 left-0"></i>
+        <h2 id="projects-title" class={h2}>Projets récents</h2>
         <a href="/projets" class="font-semibold underline decoration-2 underline-offset-4 hover:text-orange">
           Voir les {projects.length} projets
         </a>
       </div>
-      <div class="mt-10 grid gap-6 md:grid-cols-2 md:gap-8">
+      <div class="mt-12 grid gap-x-8 gap-y-14 md:grid-cols-2">
         {featured.map((project) => <ProjectCard project={project} />)}
       </div>
     </div>
+    <i data-play data-play-x="r" aria-hidden="true" class="absolute bottom-8 left-0"></i>
   </section>
 
   <!-- Présentation -->
-  <section class:list={[container, "grid items-center gap-10 py-16 md:grid-cols-[0.8fr_1.2fr] md:gap-16 md:py-24"]} aria-labelledby="about-title">
-    <Portrait />
-    <div>
-      <h2 id="about-title" class="font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppercase">
-        Le sport me passionne, la communication m'anime.
-      </h2>
-      <p class="mt-6 max-w-xl text-lg leading-relaxed">
-        Moi, c'est Valentin. Après une L2 STAPS validée (2022-2025), je poursuis en BUT MMI (2025-2028)
-        avec un objectif : travailler dans la communication sportive.
-      </p>
-      <p class="mt-4 max-w-xl leading-relaxed text-slate">
-        Je veux mettre cette double culture au service d'un club, d'une marque ou d'un événement.
-        Le design et les outils numériques m'aident à donner forme aux messages, mais la communication
-        reste au cœur de mon projet.
-      </p>
-      <Button href="/a-propos" variant="outline" class="mt-8">Découvrir mon parcours</Button>
+  <section class="relative" aria-labelledby="about-title">
+    <div class:list={[container, "relative z-[2] grid items-center gap-10 py-16 md:grid-cols-[0.8fr_1.2fr] md:gap-16 md:py-24"]}>
+      <Portrait pin />
+      <div>
+        <h2 id="about-title" class={h2}>
+          Le sport me passionne, la communication m'anime.
+        </h2>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed">
+          Moi, c'est Valentin. Après une L2 STAPS validée (2022-2025), je poursuis en BUT MMI (2025-2028)
+          avec un objectif : travailler dans la communication sportive.
+        </p>
+        <p class="mt-4 max-w-xl leading-relaxed text-slate">
+          Je veux mettre cette double culture au service d'un club, d'une marque ou d'un événement.
+          Le design et les outils numériques m'aident à donner forme aux messages, mais la communication
+          reste au cœur de mon projet.
+        </p>
+        <Button href="/a-propos" variant="outline" class="mt-8">Découvrir mon parcours</Button>
+      </div>
     </div>
+    <i data-play data-play-x="r" aria-hidden="true" class="absolute bottom-14 left-0 md:hidden"></i>
+    <i data-play data-play-x="41" aria-hidden="true" class="absolute bottom-16 left-0 hidden md:block"></i>
+    <i data-play data-play-x="l" aria-hidden="true" class="absolute bottom-6 left-0"></i>
   </section>
 
   <!-- Savoir-faire -->
-  <section class="bg-chalk py-16 md:py-24" aria-labelledby="skills-title">
-   <div class={container}>
-    <h2 id="skills-title" class="font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppercase">Ce que je sais faire</h2>
-    <div class="mt-10 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-      {
-        expertises.map(([title, text]) => (
-          <div class="border-t-[3px] border-orange pt-5">
-            <h3 class="text-lg font-semibold">{title}</h3>
-            <p class="mt-2 leading-relaxed text-slate">{text}.</p>
-          </div>
-        ))
-      }
+  <section class="relative bg-chalk" aria-labelledby="skills-title">
+    <div class:list={[container, "relative z-[2] py-16 md:py-24"]}>
+      <h2 id="skills-title" class={h2}>Ce que je sais faire</h2>
+      <div class="mt-10 grid gap-x-8 gap-y-10 lg:grid-cols-4">
+        {
+          expertises.map(([title, text], index) => (
+            <div class:list={["play-step relative pl-12 lg:pl-0", stairSkills[index]]}>
+              <Token small class="absolute top-0.5 left-0 lg:relative lg:top-0 lg:mb-4" />
+              {index === expertises.length - 1 && <i data-play data-play-x="r" aria-hidden="true" class="absolute top-2 left-0 hidden lg:block"></i>}
+              <h3 class="text-lg font-semibold transition-colors duration-300">{title}</h3>
+              <p class="mt-2 leading-relaxed text-slate">{text}.</p>
+            </div>
+          ))
+        }
+      </div>
     </div>
-   </div>
+    <i data-play data-play-x="l" aria-hidden="true" class="absolute bottom-14 left-0 lg:hidden"></i>
+    <i data-play data-play-x="r" aria-hidden="true" class="absolute bottom-6 left-0"></i>
   </section>
 
   <ContactBanner text="Une alternance, un stage ou un projet de communication : parlons-en." />
 </Layout>
+
+<script src="../scripts/board.js"></script>

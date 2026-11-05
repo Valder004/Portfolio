@@ -20,6 +20,10 @@ const links = navigation.filter((item) => item.href !== "/contact");
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
+    <script is:inline>
+      // Prépare les effets du tableau tactique, sauf si le visiteur réduit les animations
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("play-on");
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
@@ -32,7 +36,7 @@ const links = navigation.filter((item) => item.href !== "/contact");
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Graduate&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Caveat:wght@700&family=Graduate&display=swap"
     />
   </head>
 
@@ -114,7 +118,7 @@ const links = navigation.filter((item) => item.href !== "/contact");
         </nav>
       </header>
 
-      <main class="flex-1">
+      <main class="relative flex-1">
         <slot />
       </main>
 
@@ -149,5 +153,6 @@ const links = navigation.filter((item) => item.href !== "/contact");
 
     <script src="../scripts/menu.js"></script>
     <script src="../scripts/lightbox.js"></script>
+    <script src="../scripts/play.js"></script>
   </body>
 </html>

@@ -1,18 +1,20 @@
 ---
-// Photo de profil.
+// Photo de profil. Avec pin, elle est aimantée au tableau et le ballon passe par elle.
 import { Image } from "astro:assets";
+import Token from "./Token.astro";
 import portrait from "../assets/valentin-portrait.jpg";
 
-const { eager = false, class: className = "" } = Astro.props;
+const { eager = false, pin = false, class: className = "" } = Astro.props;
 ---
 
-<figure class:list={["w-full max-w-sm", className]}>
+<figure class:list={["relative w-full max-w-sm", className]}>
+  {pin && <Token class="absolute -top-5 -right-2 z-[1] md:-right-5" />}
   <Image
     src={portrait}
     alt="Valentin Deroo devant une vue panoramique sur une ville à la tombée de la nuit"
     width={480}
     height={640}
     loading={eager ? "eager" : "lazy"}
-    class="block aspect-[3/4] h-auto w-full border-[1.5px] border-ink object-cover"
+    class="block aspect-[3/4] h-auto w-full border-[1.5px] border-ink object-cover shadow-[10px_10px_0_var(--color-orange)]"
   />
 </figure>

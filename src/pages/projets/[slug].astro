@@ -17,14 +17,15 @@ const project = projects[index];
 const nextProject = projects[(index + 1) % projects.length];
 
 const container = "mx-auto max-w-7xl px-5 md:px-8";
-const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppercase";
+const h2 = "jersey font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppercase";
 ---
 
 <Layout title={project.title} description={`${project.title} : ${project.intro}`}>
   <!-- En-tête du projet -->
-  <header class:list={[container, "pt-10 pb-12 md:pt-14 md:pb-16"]}>
+  <header class:list={[container, "relative z-[2] pt-10 pb-12 md:pt-14 md:pb-16"]}>
+    <i data-play data-play-x="78" aria-hidden="true" class="absolute bottom-16 left-0 hidden md:block"></i>
     <a href="/projets" class="font-semibold underline decoration-2 underline-offset-4 hover:text-orange">Tous les projets</a>
-    <h1 class="mt-8 max-w-5xl font-varsity text-[clamp(2rem,8vw,5rem)] leading-[0.95] text-orange uppercase">
+    <h1 class="jersey-ink mt-8 max-w-5xl font-varsity text-[clamp(2rem,8vw,5rem)] leading-[0.95] text-orange uppercase">
       {project.title}
     </h1>
     <p class="mt-4 text-lg font-semibold">{projectMeta(project)}</p>
@@ -47,8 +48,10 @@ const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppe
   </header>
 
   <!-- Visuel + objectif, rôle, livrables -->
-  <section class="border-y-[1.5px] border-ink bg-chalk">
-    <div class:list={[container, "grid gap-10 py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-14 md:py-20"]}>
+  <section class="relative border-y-[1.5px] border-ink bg-chalk">
+    <i data-play data-play-x="r" aria-hidden="true" class="absolute top-6 left-0"></i>
+    <i data-play data-play-x="r" aria-hidden="true" class="absolute bottom-6 left-0"></i>
+    <div class:list={[container, "relative z-[2] grid gap-10 py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-14 md:py-20"]}>
       {
         project.slides ? (
           <PosterRotator
@@ -83,7 +86,9 @@ const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppe
   </section>
 
   <!-- Contexte -->
-  <section class:list={[container, "py-16 md:py-24"]}>
+  <section class:list={[container, "relative z-[2] py-16 md:py-24"]}>
+    <i data-play data-play-x="l" aria-hidden="true" class="absolute top-8 left-0"></i>
+    <i data-play data-play-x="l" aria-hidden="true" class="absolute bottom-8 left-0"></i>
     <div class="max-w-3xl">
       <h2 class={h2}>Le contexte</h2>
       <p class="mt-5 text-lg leading-relaxed">{project.context}</p>
@@ -116,7 +121,8 @@ const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppe
   </section>
 
   <!-- Public et message -->
-  <section class:list={[container, "grid gap-6 pb-14 md:grid-cols-2 md:pb-20"]}>
+  <section class:list={[container, "relative z-[2] grid gap-6 pb-14 md:grid-cols-2 md:pb-20"]}>
+    <i data-play data-play-x="l" aria-hidden="true" class="absolute bottom-6 left-0"></i>
     <div class="border-[1.5px] border-ink p-6 md:p-8">
       <h2 class={h2}>Le public</h2>
       <p class="mt-5 text-lg leading-relaxed">{project.audience}</p>
@@ -129,8 +135,10 @@ const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppe
   </section>
 
   <!-- Choix -->
-  <section class="bg-chalk py-16 md:py-24" aria-labelledby="choices-title">
-    <div class={container}>
+  <section class="relative bg-chalk py-16 md:py-24" aria-labelledby="choices-title">
+    <i data-play data-play-x="r" aria-hidden="true" class="absolute top-8 left-0"></i>
+    <i data-play data-play-x="r" aria-hidden="true" class="absolute bottom-8 left-0"></i>
+    <div class:list={[container, "relative z-[2]"]}>
       <h2 id="choices-title" class={h2}>Mes choix de communication</h2>
       <div class="mt-10 grid gap-8 md:grid-cols-3">
         {
@@ -146,7 +154,7 @@ const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppe
   </section>
 
   <!-- Résultat -->
-  <section class:list={[container, "grid gap-10 py-16 md:grid-cols-2 md:gap-14 md:py-24"]}>
+  <section class:list={[container, "relative z-[2] grid gap-10 py-16 md:grid-cols-2 md:gap-14 md:py-24"]}>
     <div>
       <h2 class={h2}>Le résultat</h2>
       <p class="mt-5 text-lg leading-relaxed">{project.result}</p>
@@ -158,8 +166,9 @@ const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppe
   </section>
 
   <!-- Projet suivant -->
-  <a href={`/projets/${nextProject.slug}`} class="group block bg-orange text-white">
-    <div class:list={[container, "py-12 md:py-16"]}>
+  <a href={`/projets/${nextProject.slug}`} class="group relative block bg-orange text-white">
+    <i data-play data-play-x="88" aria-hidden="true" class="absolute top-1/2 left-0"></i>
+    <div class:list={[container, "relative z-[2] py-12 md:py-16"]}>
       <span class="text-lg font-semibold">Projet suivant</span>
       <span class="mt-2 block font-varsity text-[clamp(2rem,8vw,4.5rem)] leading-none uppercase underline decoration-transparent decoration-4 underline-offset-8 transition-colors group-hover:decoration-white">
         {nextProject.title}

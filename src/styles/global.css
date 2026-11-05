@@ -18,6 +18,7 @@
   /* Polices */
   --font-sans: "Archivo", Arial, sans-serif;
   --font-varsity: "Graduate", "Rockwell", Georgia, serif;
+  --font-hand: "Caveat", "Comic Sans MS", cursive;
 }
 
 @layer base {
@@ -48,4 +49,240 @@
     outline: 3px solid var(--color-orange);
     outline-offset: 3px;
   }
+}
+
+/* Lettrage de maillot : l'ombre décalée du logo */
+@utility jersey {
+  text-shadow: 0.045em 0.055em 0 var(--color-orange);
+}
+@utility jersey-ink {
+  text-shadow: 0.045em 0.055em 0 var(--color-ink);
+}
+
+@layer components {
+/* Le fil de jeu (src/scripts/play.js) */
+.play-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.play-ball {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1; /* derrière le contenu : le ballon ne gêne jamais la lecture */
+  width: 38px;
+  height: 38px;
+  pointer-events: none;
+  will-change: transform;
+}
+.play-ball canvas {
+  position: relative;
+  display: block;
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+.play-ball-shadow {
+  position: absolute;
+  inset-inline: 2px;
+  bottom: -4px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgb(22 22 22 / 0.9);
+  filter: blur(3px);
+  opacity: 0.38;
+}
+.board-busy .play-ball {
+  opacity: 0;
+}
+
+/* Aimants */
+.token {
+  position: relative;
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, #ee7a48, var(--color-orange) 58%, var(--color-orange-dark));
+  box-shadow: 0 3px 0 rgb(22 22 22 / 0.8);
+  transition: filter 300ms, opacity 300ms;
+}
+.token-sm {
+  width: 2rem;
+  height: 2rem;
+}
+.token::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--color-orange);
+  opacity: 0;
+}
+.play-on .token:not(.is-hit) {
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+.token.is-hit {
+  animation: token-pop 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.token.is-hit::after {
+  animation: token-ring 620ms ease-out;
+}
+.play-step:has(.token.is-hit) h3 {
+  color: var(--color-orange);
+}
+@keyframes token-pop {
+  40% {
+    scale: 1.28;
+  }
+}
+@keyframes token-ring {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+/* Les points où le ballon contourne une carte par la marge */
+@media (min-width: 40rem) {
+  .play-card:nth-child(odd) .play-side {
+    display: none;
+  }
+}
+@media (min-width: 48rem) {
+  .pinned:nth-child(odd) .play-side {
+    display: none;
+  }
+}
+
+/* Feuilles aimantées : droites et alignées, elles se soulèvent au survol */
+.pinned:hover {
+  translate: 0 -4px;
+}
+
+/* Le titre souligné au feutre quand le premier but est marqué */
+.marked {
+  background: linear-gradient(var(--color-orange), var(--color-orange)) no-repeat 0 96% / 100% 0.09em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition: background-size 650ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.play-on .marked:not(.is-marked) {
+  background-size: 0 0.09em;
+}
+
+/* Le tableau de l'accueil */
+.pitch {
+  border-left: 2px solid rgb(22 22 22 / 0.2);
+  border-block: 2px solid rgb(22 22 22 / 0.2);
+}
+html:not(.play-on) .board-canvas {
+  cursor: default;
+}
+.play-on .board-canvas {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M9 18 23 4l5 5-14 14z' fill='%23161616'/%3E%3Cpath d='m9 18 5 5-8 3z' fill='%23cc4814'/%3E%3C/svg%3E") 6 26, crosshair;
+}
+.board-goal {
+  border: 3px solid var(--color-ink);
+  border-right: 0;
+  background:
+    repeating-linear-gradient(0deg, rgb(22 22 22 / 0.28) 0 1.5px, transparent 1.5px 9px),
+    repeating-linear-gradient(90deg, rgb(22 22 22 / 0.28) 0 1.5px, transparent 1.5px 9px);
+}
+.board-goal.is-goal {
+  animation: net-side 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes net-side {
+  30% {
+    scale: 1.35 1.1;
+    translate: 7px -50%;
+  }
+}
+.board-hint {
+  white-space: nowrap;
+  transition: opacity 400ms;
+}
+.board-hint {
+  opacity: 0;
+}
+.play-on.board-ready .board-hint {
+  opacity: 1;
+}
+.play-on.board-used .board-hint {
+  opacity: 0;
+}
+.score-digit.is-flip {
+  animation: score-flip 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes score-flip {
+  0% {
+    transform: perspective(120px) rotateX(-90deg);
+  }
+  100% {
+    transform: perspective(120px) rotateX(0);
+  }
+}
+
+/* Les projecteurs du match de nuit */
+.play-on .lights img {
+  filter: brightness(0.25) saturate(0.6);
+  transition: filter 500ms;
+}
+.play-on .lights.is-hit img {
+  filter: none;
+  animation: floodlight 1100ms linear;
+}
+@keyframes floodlight {
+  0% {
+    filter: brightness(0.25) saturate(0.6);
+  }
+  12% {
+    filter: brightness(1.25);
+  }
+  20% {
+    filter: brightness(0.35) saturate(0.7);
+  }
+  34% {
+    filter: brightness(1.35);
+  }
+  44% {
+    filter: brightness(0.7);
+  }
+  100% {
+    filter: none;
+  }
+}
+
+/* Le but où finit la page */
+.goal-net {
+  border: 6px solid var(--color-white);
+  border-bottom: 0;
+  background:
+    repeating-linear-gradient(0deg, rgb(255 255 255 / 0.3) 0 1.5px, transparent 1.5px 16px),
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.3) 0 1.5px, transparent 1.5px 16px);
+}
+.goal.is-goal .goal-net {
+  animation: net-back 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.goal.is-goal .goal-button {
+  animation: goal-button 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes net-back {
+  30% {
+    scale: 1.07 1.14;
+    translate: 0 -6px;
+  }
+}
+@keyframes goal-button {
+  35% {
+    scale: 1.14;
+  }
+}
 }

@@ -58,6 +58,7 @@ const inputClass =
 
 <script>
   import { sendContactMessage } from "../lib/contact.js";
+  import { burst } from "../scripts/confetti.js";
 
   const form = document.querySelector("[data-contact-form]");
   const note = form?.querySelector("[data-form-note]");
@@ -79,6 +80,9 @@ const inputClass =
         showNote("Votre application email va s'ouvrir pour finaliser l'envoi.");
       } else {
         showNote("Message envoyé. Je vous réponds rapidement.");
+        // Message envoyé : c'est un but
+        const rect = button.getBoundingClientRect();
+        burst(rect.left + rect.width / 2, rect.top, 130);
         form.reset();
       }
     } catch (error) {

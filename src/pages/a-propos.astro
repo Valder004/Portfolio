@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import PageHeading from "../components/PageHeading.astro";
 import ContactBanner from "../components/ContactBanner.astro";
 import Portrait from "../components/Portrait.astro";
+import Token from "../components/Token.astro";
 import { expertises } from "../data/projects.js";
 
 const path = [
@@ -25,16 +26,16 @@ const path = [
 ];
 
 const container = "mx-auto max-w-7xl px-5 md:px-8";
-const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppercase";
+const h2 = "jersey font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppercase";
 ---
 
 <Layout title="À propos" description="Valentin Deroo, étudiant en BUT MMI après une L2 STAPS, orienté communication sportive.">
-  <div class:list={[container, "pt-12 pb-16 md:pt-16 md:pb-24"]}>
+  <div class:list={[container, "relative z-[2] pt-12 pb-16 md:pt-16 md:pb-24"]}>
     <PageHeading title="À propos" intro="Étudiant en MMI après une L2 STAPS, je me spécialise dans la communication sportive." />
 
     <!-- Présentation -->
     <section class="mt-12 grid items-start gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
-      <Portrait eager />
+      <Portrait eager pin />
       <div class="max-w-2xl">
         <p class="text-xl leading-relaxed md:text-2xl">
           Je suis Valentin. Je m'oriente vers la communication sportive pour faire vivre
@@ -50,16 +51,21 @@ const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppe
         </p>
       </div>
     </section>
+    <i data-play data-play-x="41" aria-hidden="true" class="absolute bottom-6 left-0 hidden md:block"></i>
   </div>
 
   <!-- Parcours -->
-  <section class="border-y-[1.5px] border-ink bg-chalk py-16 md:py-24" aria-labelledby="path-title">
-    <div class={container}>
+  <section class="relative border-y-[1.5px] border-ink bg-chalk py-16 md:py-24" aria-labelledby="path-title">
+    <i data-play data-play-x="r" aria-hidden="true" class="absolute top-2 left-0 md:hidden"></i>
+    <i data-play data-play-x="l" aria-hidden="true" class="absolute top-6 left-0"></i>
+    <div class:list={[container, "relative z-[2]"]}>
       <h2 id="path-title" class={h2}>Mon parcours</h2>
       <ol class="mt-10 space-y-6">
         {
           path.map((step) => (
-            <li class="grid gap-4 border-[1.5px] border-ink bg-white p-6 md:grid-cols-[10rem_1fr] md:gap-10 md:p-8">
+            <li class="relative grid gap-4 border-[1.5px] border-ink bg-white p-6 md:grid-cols-[10rem_1fr] md:gap-10 md:p-8">
+              <Token small class="absolute -top-4 -left-3 md:-left-4" />
+              <i data-play data-play-x="l" aria-hidden="true" class="absolute top-1/2 left-0"></i>
               <div>
                 <p class="font-varsity text-2xl">{step.date}</p>
                 <p class="mt-1 font-semibold text-orange">{step.status}</p>
@@ -80,12 +86,15 @@ const h2 = "font-varsity text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.05] uppe
   </section>
 
   <!-- Savoir-faire -->
-  <section class:list={[container, "py-16 md:py-24"]} aria-labelledby="skills-title">
+  <section class:list={[container, "relative z-[2] py-16 md:py-24"]} aria-labelledby="skills-title">
     <h2 id="skills-title" class={h2}>Savoir-faire</h2>
     <div class="mt-10 grid gap-6 sm:grid-cols-2">
       {
         expertises.map(([title, text]) => (
-          <article class="border-[1.5px] border-ink bg-chalk p-6 md:p-8">
+          <article class="play-card relative border-[1.5px] border-ink bg-chalk p-6 md:p-8">
+            <Token small class="absolute -top-4 right-5" />
+            <i data-play data-play-x="r" aria-hidden="true" class="play-side absolute top-8 left-0"></i>
+            <i data-play data-play-x="r" aria-hidden="true" class="play-side absolute bottom-1 left-0"></i>
             <h3 class="font-varsity text-[clamp(1.4rem,3vw,1.9rem)] leading-tight text-orange uppercase">{title}</h3>
             <p class="mt-3 text-lg leading-relaxed">{text}.</p>
           </article>

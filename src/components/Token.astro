@@ -1,0 +1,6 @@
+---
+// Aimant du tableau tactique : un point de passage du ballon (voir src/scripts/play.js).
+const { class: className = "", small = false } = Astro.props;
+---
+
+<span data-play aria-hidden="true" class:list={["token", small && "token-sm", className]}></span>

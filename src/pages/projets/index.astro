@@ -11,14 +11,15 @@ const projects = await getProjects();
 ---
 
 <Layout title="Projets" description="Les projets de Valentin Deroo : campagnes, identités visuelles, UX/UI et stratégie de communication.">
-  <div class="mx-auto max-w-7xl px-5 pt-12 pb-16 md:px-8 md:pt-16 md:pb-24">
+  <div class="relative z-[2] mx-auto max-w-7xl px-5 pt-12 pb-16 md:px-8 md:pt-16 md:pb-24">
     <PageHeading
       title="Projets"
       intro="Campagnes, identités visuelles et sites réalisés pendant mes études. Pour chacun, j'explique le public visé, le message et mes choix."
     />
 
-    <div class="mt-12 grid gap-6 md:grid-cols-2 md:gap-8">
+    <div class="mt-14 grid gap-x-8 gap-y-14 md:grid-cols-2">
       {projects.map((project) => <ProjectCard project={project} showRole />)}
     </div>
+    <i data-play data-play-x="r" aria-hidden="true" class="absolute bottom-8 left-0"></i>
   </div>
 </Layout>
