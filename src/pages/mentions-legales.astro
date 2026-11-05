@@ -1,0 +1,100 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHeading from "../components/PageHeading.astro";
+import { site } from "../data/site.js";
+
+const updated = "5 novembre 2026";
+const retention = "12 mois";
+
+const h2 = "jersey font-varsity text-[clamp(1.5rem,3.5vw,2.25rem)] leading-[1.05] uppercase";
+const link = "font-semibold underline decoration-2 underline-offset-4 hover:text-orange";
+---
+
+<Layout title="Mentions légales" description="Mentions légales et politique de confidentialité du portfolio de Valentin Deroo.">
+  <div class="mx-auto max-w-7xl px-5 pt-12 pb-16 md:px-8 md:pt-16 md:pb-24">
+    <PageHeading title="Mentions légales" intro="Qui édite ce site, où il est hébergé et ce que deviennent les informations envoyées depuis le formulaire de contact." />
+
+    <div class="mt-12 max-w-3xl space-y-12 text-lg leading-relaxed">
+      <section aria-labelledby="editeur">
+        <h2 id="editeur" class={h2}>Éditeur du site</h2>
+        <p class="mt-4">
+          Ce site est le portfolio personnel de {site.name}, particulier et étudiant en BUT MMI,
+          également directeur de la publication.
+        </p>
+        <p class="mt-3">
+          Contact :
+          <a href={`mailto:${site.email}`} class:list={[link, "wrap-anywhere"]}>{site.email}</a>
+        </p>
+      </section>
+
+      <section aria-labelledby="hebergement">
+        <h2 id="hebergement" class={h2}>Hébergement</h2>
+        <p class="mt-4">
+          <strong>Le site :</strong> Netlify, Inc., 101 2nd Street, San Francisco, CA 94105, États-Unis.
+        </p>
+        <p class="mt-3">
+          <strong>Les projets et les messages du formulaire :</strong> Serverd SAS, 10 rue de Penthièvre, 75008 Paris, France.
+        </p>
+      </section>
+
+      <section id="donnees" aria-labelledby="donnees-titre" class="scroll-mt-28">
+        <h2 id="donnees-titre" class={h2}>Données personnelles</h2>
+        <p class="mt-4">
+          Je suis responsable des données envoyées depuis le <a href="/contact" class={link}>formulaire de contact</a>.
+          Vous pouvez aussi me joindre directement par e-mail ou par téléphone, sans utiliser ce formulaire.
+        </p>
+
+        <h3 class="mt-7 text-xl font-bold">Ce qui est collecté</h3>
+        <p class="mt-2">Votre nom, votre adresse e-mail, votre message et sa date d'envoi.</p>
+
+        <h3 class="mt-7 text-xl font-bold">Pourquoi</h3>
+        <p class="mt-2">
+          Uniquement pour lire votre demande et y répondre. Ce traitement repose sur mon intérêt légitime
+          à répondre aux personnes qui me contactent (article 6.1.f du RGPD).
+        </p>
+
+        <h3 class="mt-7 text-xl font-bold">Qui y a accès</h3>
+        <p class="mt-2">
+          Moi seul, depuis un espace d'administration protégé par un compte. Les données sont stockées chez
+          l'hébergeur indiqué ci-dessus. Elles ne sont ni vendues, ni utilisées à des fins publicitaires.
+        </p>
+
+        <h3 class="mt-7 text-xl font-bold">Combien de temps</h3>
+        <p class="mt-2">
+          Au maximum {retention} après notre dernier échange, puis les messages sont supprimés.
+        </p>
+
+        <h3 class="mt-7 text-xl font-bold">Vos droits</h3>
+        <p class="mt-2">
+          Vous pouvez demander l'accès à vos données, leur rectification ou leur effacement, en limiter
+          l'utilisation ou vous y opposer, en m'écrivant à
+          <a href={`mailto:${site.email}`} class:list={[link, "wrap-anywhere"]}>{site.email}</a>.
+          Vous pouvez aussi adresser une réclamation à la
+          <a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener noreferrer" class={link}>CNIL</a>.
+        </p>
+      </section>
+
+      <section aria-labelledby="cookies">
+        <h2 id="cookies" class={h2}>Cookies et services tiers</h2>
+        <p class="mt-4">Ce site ne dépose aucun cookie et n'utilise aucun outil de mesure d'audience ni de publicité.</p>
+        <p class="mt-3">
+          Comme pour tout site web, l'hébergeur peut traiter des données techniques de connexion, comme
+          l'adresse IP. Les polices d'écriture sont chargées depuis Google Fonts : votre navigateur
+          communique donc votre adresse IP à Google. Netlify et Google peuvent traiter ces données hors de
+          l'Union européenne.
+        </p>
+      </section>
+
+      <section aria-labelledby="propriete">
+        <h2 id="propriete" class={h2}>Propriété intellectuelle</h2>
+        <p class="mt-4">
+          Les textes et créations de ce site sont protégés par le droit d'auteur : leur réutilisation
+          nécessite un accord préalable. Les marques et logos cités restent la propriété de leurs titulaires.
+          Certains projets sont des créations personnelles non officielles et n'impliquent aucun partenariat.
+        </p>
+      </section>
+
+      <p class="border-t-[1.5px] border-ink/20 pt-5 text-base text-slate">Dernière mise à jour : {updated}.</p>
+    </div>
+  </div>
+</Layout>
