@@ -144,7 +144,7 @@ function setup() {
       lengths.push(lengths[i - 1] + Math.hypot(stops[i].x - stops[i - 1].x, stops[i].y - stops[i - 1].y));
     }
     const total = lengths[lengths.length - 1];
-    const duration = Math.min(1500, Math.max(420, total * 1.15));
+    const duration = Math.min(2600, Math.max(1000, total * 2.4));
 
     state = "playing";
     root.classList.add("board-busy");

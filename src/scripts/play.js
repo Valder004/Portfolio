@@ -84,6 +84,8 @@ function start() {
   const CHUNK_POINTS = 200; // le trait est découpé : seul le morceau en cours est recalculé
   const MIN_PACE = 0.35; // même sur un passage plat, le scroll fait toujours avancer le ballon
   const MAX_SPEED = 7000; // pixels par seconde, pour ne jamais se téléporter
+  const SHOT_SPEED = 520; // vitesse de la frappe finale : assez lente pour la voir entrer dans le but
+  const SHOT_RUN = 380; // distance minimale parcourue à cette vitesse avant le but
 
   const gutterX = (side, width) => {
     const padding = width >= 768 ? 32 : 20;
@@ -251,7 +253,7 @@ function start() {
     // Devant le but, le ballon n'attend plus le scroll : il frappe
     const beforeLast = stops[stops.length - 2];
     const isGoal = last.el.hasAttribute("data-play-goal");
-    shotStart = isGoal ? total - (total - beforeLast.at) * 0.6 : Infinity;
+    shotStart = isGoal ? Math.max(0, total - Math.max(total - beforeLast.at, SHOT_RUN)) : Infinity;
 
     if (reduceMotion) {
       for (const chunk of chunks) chunk.piece.setAttribute("stroke-dashoffset", 0);
@@ -418,7 +420,16 @@ function start() {
 
   // Ressort amorti : le ballon accélère et ralentit en douceur, quelle que soit la cadence d'images
   function follow(dt) {
-    const smoothTime = target === total && current >= shotStart ? 0.13 : 0.17;
+    const hasGoal = shotStart !== Infinity;
+    // Sur la fin, vitesse régulière : le ballon entre dans le filet avec de l'élan, sans ramper
+    if (hasGoal && target === total && current >= shotStart) {
+      velocity = SHOT_SPEED;
+      current = Math.min(total, current + SHOT_SPEED * dt);
+      if (current === total) velocity = 0;
+      return;
+    }
+    const before = current;
+    const smoothTime = 0.17;
     const omega = 2 / smoothTime;
     const x = omega * dt;
     const decay = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
@@ -433,6 +444,15 @@ function start() {
       velocity = 0;
     }
     current = Math.max(0, Math.min(total, current));
+
+    // À l'approche du but, le ballon freine progressivement jusqu'à la vitesse de la frappe
+    if (hasGoal && current > before) {
+      const cap = SHOT_SPEED + Math.max(0, total - before - SHOT_RUN) * 3.5;
+      if ((current - before) / dt > cap) {
+        current = before + cap * dt;
+        velocity = cap;
+      }
+    }
   }
 
   function loop(now) {
