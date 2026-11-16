@@ -3,7 +3,7 @@
 > Une entrée par semaine : ce que j'ai fait, ce qui a coincé, ce que j'ai décidé.
 
 ## Septembre — positionnement et maquette
-- Note de positionnement : je vise les services communication de clubs, d'événements et de marques sportives, pour un stage puis une alternance en 3eme année.
+- Note de positionnement : je vise les services communication de clubs, d'événements et de marques sportives, pour un stage puis une alternance en 3e année.
 - Recherche graphique, moodboard, pistes écartées, maquette Figma Make.
 - Soutenance maquette (octobre).
 
@@ -32,7 +32,7 @@
 - Coincé : la card affichait un bloc noir (conflit `relative` / `absolute`), corrigé.
 
 ## Semaine du 26 octobre au 1er novembre 
-- Durant les vacances je n'ai pas fait grand choses
+- Vacances : je n'ai pas beaucoup avancé sur le portfolio.
 
 ## Semaine du 2 au 8 novembre — interactions et juridique
 - « Tableau tactique » en page d'accueil : le ballon suit la page jusqu'au but (fait avec Claude Code), puis but ralenti pour être plus lisible.
@@ -46,12 +46,11 @@
 - Lien d'évitement, URL canonique, image de partage, `robots.txt`, `sitemap.xml`.
 - Contrastes corrigés sur la page À propos, niveau de titre corrigé sur la page Projets.
 - Crédit de la photo d'accueil ajouté, dépendances inutilisées retirées.
-- Rédaction de `IA.md`, `QUALITE.md` et de ce journal ; maquettes Figma des pages GESTONS! et
-  Affiches sportives en desktop et mobile.
+- Rédaction de `IA.md`, `QUALITE.md` et de ce journal ;
+- Mesures : Lighthouse 99 / 100 / 100 / 100, EcoIndex A (84/100), WAVE 0 erreur.
+- Coincé : WAVE a trouvé un contraste trop faible sur le bandeau de contact (texte blanc à 90 %), corrigé.
 
 ## Présence professionnelle — pourquoi LinkedIn et Instagram
-> Proposition à reformuler avec mes mots (5 lignes demandées).
-
 LinkedIn, parce que c'est là que les responsables communication des clubs et des agences recrutent.
 Instagram, parce que c'est le réseau principal de la communication des clubs : mes affiches sont pensées pour ce format (1080 × 1350 px) et montrent directement ce que je sais produire.
 

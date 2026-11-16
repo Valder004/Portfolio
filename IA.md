@@ -2,14 +2,13 @@
 
 > Ce fichier répond au point 3 du sujet : pour chaque outil, à quelle étape, pour quoi faire,
 > et ce que j'ai modifié, corrigé ou rejeté.
-> Les passages marqués **[à compléter]** sont à vérifier ou à préciser par moi avant le rendu.
 
 ## Figma Make (Figma AI)
 
 - **Étape :** conception, septembre – début octobre.
 - **Pour quoi faire :** générer une première maquette du portfolio à partir de mes indications,
   puis la faire évoluer (« Revise design based on feedback »).
-- **Ce que j'ai modifié ou rejeté :** Ma maquette de mon portfolio a beaucoup évoluer, j'avais d'abord une couleur bleu foncé qui est déconseillé pour être original, ensuite je cherchais à faire un portfolio prenant la forme de casier, j'ai demandé à Figma make ne me le faire mais je n'étais pas satisfait par le rendu donc j'ai fait le tout moi même. Après la soutenance j'ai demandé à figma make de me refaire la maquette en gardant tous les contenus mais en prenant en compte les critiques des professeurs.
+- **Ce que j'ai modifié ou rejeté :** La maquette de mon portfolio a beaucoup évolué. J'avais d'abord choisi un bleu foncé, que j'ai abandonné car il est très courant et peu original. Je voulais ensuite un portfolio en forme de casier : j'ai demandé à Figma Make de le faire, mais le rendu ne me satisfaisait pas, donc j'ai réalisé cette version moi-même. Après la soutenance maquette, j'ai demandé à Figma Make de refaire la maquette en gardant tous mes contenus, mais en tenant compte des critiques des professeurs.
 
 ## Claude (application Claude, Anthropic)
 
@@ -43,11 +42,10 @@
 - **Ce que j'ai fait moi-même :** toutes les commandes sur le VPS et les réglages DNS / Netlify.
   Pendant le débogage, on a trouvé qu'un de mes anciens fichiers Apache (`clients.conf`) n'avait
   pas de balises `<VirtualHost>` et mettait tout le port 80 en HTTPS : je l'ai corrigé.
-- **Ce que j'ai rejeté :** PocketHost (devenu payant) au profit du VPS de monsieur Mahbed.
+- **Ce que j'ai rejeté :** PocketHost (devenu payant) au profit du VPS mis à disposition par l'IUT.
 
 ### Contenus
-- **Pour quoi faire :** reformuler et structurer les études de cas, rédiger les textes de la page à partir des informations que je lui ai donné
-  « Affiches sportives » à partir de mes affiches.
+- **Pour quoi faire :** reformuler et structurer les études de cas à partir des informations que je lui ai données, et rédiger les textes de la page « Affiches sportives » à partir de mes affiches.
 - **Ce que j'ai fourni :** les affiches (créations personnelles), les informations sur mes projets,
   mon parcours.
 
@@ -55,7 +53,11 @@
 - **Pour quoi faire :** relire le site par rapport au sujet, ajouter le lien d'évitement, l'URL
   canonique, l'image de partage, `robots.txt`, `sitemap.xml`, corriger deux contrastes et un niveau
   de titre, compléter les crédits photo, préparer ce fichier, `JOURNAL.md` et `QUALITE.md`.
-- **Ce que j'ai vérifié :** Relecture de toutes les pages ajouté pour éviter les erreurs
+- **Ce que j'ai vérifié :** j'ai relu les pages et les fichiers ajoutés pour corriger les erreurs, lancé moi-même Lighthouse, WAVE et EcoIndex, et contrôlé les règles d'accès de PocketBase. WAVE a relevé un contraste insuffisant sur le bandeau de contact, corrigé ensuite.
+
+### Maquette Figma du site (16 novembre)
+- **Pour quoi faire :** importer dans Figma les pages du site en ligne (Accueil, Projets, GESTONS!, Affiches sportives, À propos, Contact), en version ordinateur (1440 px) et mobile (390 px), pour que la maquette corresponde au site final.
+
 
 
 ## Claude Code
@@ -71,5 +73,5 @@
 
 Je suis capable d'expliquer en soutenance : la récupération des projets depuis PocketBase
 (`src/lib/projects.js`), le rendu à la demande avec cache (`prerender = false`), le formulaire de
-contact, le diaporama (`PosterRotator.astro`), la configuration Apache / Certbot du VPS.
-le tableau tactique avec ballon.
+contact, le diaporama (`PosterRotator.astro`), la configuration Apache / Certbot du VPS et le
+tableau tactique avec le ballon.

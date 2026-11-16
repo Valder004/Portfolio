@@ -3,7 +3,6 @@
 > Point 6 du sujet : pour chaque critère retenu, ce que j'ai vérifié, comment, et ce que j'ai corrigé.
 > Mesures faites le 16 novembre 2026 sur le site en ligne (`https://portfolio.valentin-deroo.fr`),
 > par un script dans le navigateur (analyse du HTML de chaque page et API Performance).
-> Les lignes **[à mesurer]** sont à remplir avec les outils indiqués, après le prochain déploiement.
 
 ## Pourquoi ces critères
 Mon site a quatre particularités qui orientent les contrôles :
@@ -30,7 +29,7 @@ Mon site a quatre particularités qui orientent les contrôles :
 | Focus visible | style `:focus-visible` dans `global.css` | contour orange sur tous les éléments | — |
 | Animations | `prefers-reduced-motion` dans `play.js`, `board.js`, `confetti.js`, `PosterRotator.astro`, `global.css` | animations coupées si le réglage est actif | — |
 | Messages du formulaire | zone `role="status"` `aria-live="polite"` | confirmation annoncée par les lecteurs d'écran | — |
-| Audit automatique | WAVE ou Lighthouse « Accessibilité » | [à mesurer] | |
+| Audit automatique | Lighthouse « Accessibilité » et WAVE sur l'accueil (16 novembre) | Lighthouse : **100/100** ; WAVE : **0 erreur**, 5 alertes, **1 erreur de contraste** : le texte du bandeau orange « Une alternance, un stage… » en blanc à 90 % d'opacité (4,23:1 au lieu de 4,5:1) | texte passé en blanc plein (4,66:1) dans `ContactBanner.astro` |
 
 ## 2. Sobriété et performance
 
@@ -43,7 +42,7 @@ Mon site a quatre particularités qui orientent les contrôles :
 | Mise en page mobile | largeur de défilement à 360 px sur 7 pages | 360 px partout : aucun défilement horizontal | — |
 | Requêtes vers la base | cache Netlify de 60 s sur les pages projets | PocketBase n'est interrogé qu'une fois par minute au maximum, pas à chaque visite | — |
 | Dépendances inutiles | lecture de `package.json` | 3 paquets de polices `@fontsource` non utilisés | supprimés |
-| Score global | Lighthouse « Performance » et EcoIndex | [à mesurer] | |
+| Score global | Lighthouse « Performance » et « Bonnes pratiques » sur l'accueil (16 novembre) ; EcoIndex | Lighthouse : Performance **99/100**, Bonnes pratiques **100/100** ; EcoIndex : **A (84/100)**, 0,341 Mo, 210 éléments, 19 requêtes | — |
 
 ## 3. Référencement
 
@@ -56,7 +55,7 @@ Mon site a quatre particularités qui orientent les contrôles :
 | Partage sur les réseaux | balises Open Graph | titre et description présents, image absente | `og:image` (1200 × 630), `og:url`, `og:locale`, carte Twitter |
 | `robots.txt` et plan du site | `/robots.txt`, `/sitemap.xml` | 404 | `public/robots.txt` et `src/pages/sitemap.xml.js` (liste aussi les projets de PocketBase) |
 | Page 404 | adresse inexistante | vrai code 404, page « Hors-jeu. » | — |
-| Vérification après mise en ligne | Lighthouse « SEO », Google Search Console | [à mesurer] | |
+| Vérification après mise en ligne | Lighthouse « SEO » sur l'accueil (16 novembre) | **100/100** | |
 
 ## 4. Conformité juridique
 
@@ -67,4 +66,4 @@ Mon site a quatre particularités qui orientent les contrôles :
 | Cookies | outils du navigateur | aucun cookie, aucune mesure d'audience ; Google Fonts signalé | — |
 | Droits sur les images | origine de chaque visuel | photo d'accueil Unsplash non créditée | crédit « Abigail Keenan, Unsplash » ajouté ; mention des logos et photos de joueurs utilisés dans un cadre personnel et non commercial |
 | Projets non officiels | textes des projets | « visuels non officiels » dans le contexte des affiches | — |
-| Accès à la base | règles d'API PocketBase | [à vérifier dans l'admin : `messages` en création publique et lecture réservée à l'admin] | |
+| Accès à la base | règles d'API de la collection `messages` dans l'admin PocketBase en ligne, et migration `1791550000_create_collections.js` | création ouverte à tous (le formulaire peut enregistrer un message) ; lecture, modification et suppression réservées au compte administrateur (« Superusers only ») : personne ne peut lire les messages des autres par l'API | — |
