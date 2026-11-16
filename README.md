@@ -3,6 +3,21 @@
 Portfolio de communication sportive, construit avec **Astro**, **Tailwind CSS v4** et du **JavaScript** vanilla.
 Design d'origine : maquette Figma Make.
 
+- **Site en ligne :** https://portfolio.valentin-deroo.fr
+- **Livrables :** [journal de bord](JOURNAL.md) · [déclaration IA](IA.md) · [contrôle qualité](QUALITE.md)
+
+## Technologies et librairies déclarées
+
+| Outil | Rôle | Pourquoi |
+|---|---|---|
+| Astro 5 | framework, pages et composants | HTML léger, peu de JavaScript envoyé, pages statiques et pages à la demande dans le même projet |
+| Tailwind CSS v4 | styles (classes dans le HTML, thème dans `@theme`) | adapté à ma direction artistique : couleurs du logo, Graduate + Archivo, aucun thème tout fait |
+| @astrojs/netlify | adaptateur de déploiement | rendu à la demande des pages projets et optimisation des images |
+| JavaScript sans librairie | menu, visionneuse, diaporama, tableau tactique | interactions légères, écrites pour le site |
+| PocketBase 0.40 | base de données et back-office (projets, messages) | API REST + administration, hébergé sur mon VPS |
+| Apache + Certbot | reverse proxy et HTTPS sur le VPS | `api.valentin-deroo.fr` |
+| Netlify | hébergement du site | déploiement automatique à chaque `git push` |
+
 ## Démarrer
 
 ```bash

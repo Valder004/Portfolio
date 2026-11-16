@@ -5,7 +5,9 @@ import PosterRotator from "./PosterRotator.astro";
 import Token from "./Token.astro";
 import { projectMeta } from "../lib/projects.js";
 
-const { project, showRole = false } = Astro.props;
+// headingLevel : h2 quand la card est directement sous le titre de la page (page Projets), h3 sinon
+const { project, showRole = false, headingLevel = "h3" } = Astro.props;
+const Heading = headingLevel;
 ---
 
 <a
@@ -41,9 +43,9 @@ const { project, showRole = false } = Astro.props;
 
   <div class="flex flex-1 flex-col p-5 md:p-6">
     <p class="text-sm text-slate">{projectMeta(project)}</p>
-    <h3 class="mt-2 font-varsity text-[clamp(1.6rem,4vw,2.25rem)] leading-none uppercase group-hover:text-orange">
+    <Heading class="mt-2 font-varsity text-[clamp(1.6rem,4vw,2.25rem)] leading-none uppercase group-hover:text-orange">
       {project.title}
-    </h3>
+    </Heading>
     <p class="mt-3 leading-relaxed">{project.intro}</p>
     {
       showRole && (

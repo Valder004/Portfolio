@@ -18,7 +18,7 @@ const projects = await getProjects();
     />
 
     <div class="mt-14 grid gap-x-8 gap-y-14 md:grid-cols-2">
-      {projects.map((project) => <ProjectCard project={project} showRole />)}
+      {projects.map((project) => <ProjectCard project={project} showRole headingLevel="h2" />)}
     </div>
     <i data-play data-play-x="r" aria-hidden="true" class="absolute bottom-8 left-0"></i>
   </div>

@@ -8,6 +8,9 @@ import Stripes from "../components/Stripes.astro";
 const { title, description = site.description } = Astro.props;
 const pageTitle = title ? `${title} | ${site.name}` : site.title;
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+// Adresse officielle de la page (référencement) et image de partage sur les réseaux sociaux
+const canonical = new URL(pathname, Astro.site);
+const ogImage = new URL("/og-image.jpg", Astro.site);
 
 const isActive = (href) =>
   href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
@@ -30,6 +33,12 @@ const links = navigation.filter((item) => item.href !== "/contact");
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="fr_FR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={canonical} />
+    <link rel="sitemap" href="/sitemap.xml" />
     <meta name="theme-color" content="#ffffff" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -41,6 +50,8 @@ const links = navigation.filter((item) => item.href !== "/contact");
   </head>
 
   <body class="font-sans">
+    <!-- Lien d'évitement : au clavier, Tab puis Entrée mène directement au contenu -->
+    <a href="#contenu" class="sr-only z-50 bg-orange px-4 py-3 font-semibold text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3">Aller au contenu</a>
     <div class="flex min-h-dvh flex-col overflow-x-clip">
       <!-- En-tête -->
       <header class="sticky top-0 z-30 border-b-[1.5px] border-ink bg-white">
@@ -118,7 +129,7 @@ const links = navigation.filter((item) => item.href !== "/contact");
         </nav>
       </header>
 
-      <main class="relative flex-1">
+      <main id="contenu" tabindex="-1" class="relative flex-1 focus:outline-none">
         <slot />
       </main>
 
