@@ -49,7 +49,7 @@ Mon site a quatre particularités qui orientent les contrôles :
 | Critère | Comment je l'ai vérifié | Résultat | Correction |
 |---|---|---|---|
 | Titre unique par page | `<title>` des 8 pages | tous différents (« Projets \| Valentin Deroo »…) | — |
-| Meta description | longueur sur les 8 pages | 65 à 160 caractères ; GESTONS! (71) et Contact (65) un peu courtes | [à compléter : allonger l'intro GESTONS! dans PocketBase] |
+| Meta description | longueur sur les 8 pages | 65 à 160 caractères ; GESTONS! (71) et Contact (65) un peu courtes |
 | Contenu lisible sans JavaScript | HTML reçu par le navigateur | les projets sont dans le HTML (rendu côté serveur), pas chargés après coup | — |
 | URL canonique | balise `link rel="canonical"` | absente | ajoutée dans `Layout.astro` |
 | Partage sur les réseaux | balises Open Graph | titre et description présents, image absente | `og:image` (1200 × 630), `og:url`, `og:locale`, carte Twitter |
